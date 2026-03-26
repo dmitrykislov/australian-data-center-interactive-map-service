@@ -7,6 +7,7 @@ import com.datacenter.model.DataCenter;
 import com.datacenter.model.DataCenterStatus;
 import com.datacenter.redis.RedisOperations;
 import com.datacenter.redis.SearchCacheManager;
+import com.datacenter.search.SearchAlgorithmImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ class SearchIntegrationTest {
 
   @BeforeEach
   void setUp() {
-    searchAlgorithm = new SearchAlgorithm();
+    searchAlgorithm = new SearchAlgorithmImpl();
     mockRedisOps = new MockRedisOperations();
     cacheManager = new SearchCacheManager(mockRedisOps, new ObjectMapper());
     testDataCenters = createLargeTestDataSet();
@@ -95,11 +96,13 @@ class SearchIntegrationTest {
     SearchQuery query = new SearchQuery("NYC");
     searchService.search(query);
 
-    assertTrue(mockRedisOps.hasKeys());
+    // Cache should have keys after search
+    assertTrue(mockRedisOps.hasKeys(), "Cache should contain keys after search");
 
     searchService.clearCache();
 
-    assertTrue(mockRedisOps.isEmpty());
+    // After clearing, cache should be empty
+    assertFalse(mockRedisOps.hasKeys(), "Cache should be empty after clearCache()");
   }
 
   @Test
@@ -163,6 +166,61 @@ class SearchIntegrationTest {
     private final java.util.Map<String, String> store = new java.util.HashMap<>();
 
     @Override
+    public void saveDataCenter(com.datacenter.model.DataCenter dataCenter) {}
+
+    @Override
+    public com.datacenter.model.DataCenter getDataCenter(String id) {
+      return null;
+    }
+
+    @Override
+    public java.util.List<com.datacenter.model.DataCenter> getAllDataCenters() {
+      return new java.util.ArrayList<>();
+    }
+
+    @Override
+    public void deleteDataCenter(String id) {}
+
+    @Override
+    public java.util.List<com.datacenter.model.DataCenter> filterByOperator(String operator) {
+      return new java.util.ArrayList<>();
+    }
+
+    @Override
+    public java.util.List<com.datacenter.model.DataCenter> filterByStatus(String status) {
+      return new java.util.ArrayList<>();
+    }
+
+    @Override
+    public java.util.List<com.datacenter.model.DataCenter> filterByRegion(String region) {
+      return new java.util.ArrayList<>();
+    }
+
+    @Override
+    public <T> T get(String key, Class<T> type) {
+      return null;
+    }
+
+    @Override
+    public <T> void set(String key, T value, long timeout, java.util.concurrent.TimeUnit unit) {
+      store.put(key, value != null ? value.toString() : "");
+    }
+
+    @Override
+    public void delete(String key) {}
+
+    @Override
+    public void deleteByPattern(String pattern) {
+      String regex = pattern.replace("*", ".*");
+      store.keySet().removeIf(key -> key.matches(regex));
+    }
+
+    @Override
+    public boolean exists(String key) {
+      return store.containsKey(key);
+    }
+
+    @Override
     public String get(String key) {
       return store.get(key);
     }
@@ -173,9 +231,8 @@ class SearchIntegrationTest {
     }
 
     @Override
-    public void deleteByPattern(String pattern) {
-      String regex = pattern.replace("*", ".*");
-      store.keySet().removeIf(key -> key.matches(regex));
+    public void clearAll() {
+      store.clear();
     }
 
     boolean hasKeys() {

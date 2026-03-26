@@ -35,8 +35,13 @@ public class SearchQuery {
   }
 
   private static String validateQuery(String query) {
-    if (query == null || query.trim().isEmpty()) {
-      throw new IllegalArgumentException("Search query cannot be null or empty");
+    // Null queries are not allowed - must throw
+    if (query == null) {
+      throw new IllegalArgumentException("Search query cannot be null");
+    }
+    // Empty queries are allowed - treat as "match all"
+    if (query.trim().isEmpty()) {
+      return "";
     }
     if (query.length() > 255) {
       throw new IllegalArgumentException(

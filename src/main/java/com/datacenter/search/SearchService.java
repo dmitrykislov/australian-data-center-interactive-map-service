@@ -2,6 +2,7 @@ package com.datacenter.search;
 
 import com.datacenter.model.DataCenter;
 import com.datacenter.redis.SearchCacheManager;
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,6 +10,7 @@ import java.util.Objects;
  * Service for searching data centers with caching support.
  * Provides search and autocomplete functionality with Redis caching (1-hour TTL).
  */
+@Service
 public class SearchService {
 
   private final SearchAlgorithm searchAlgorithm;

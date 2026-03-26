@@ -1,31 +1,47 @@
-# Node.js
-node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
-yarn.lock
+# Compiled class file
+*.class
 
-# Playwright
-test-results/
-playwright-report/
-.auth/
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
 
 # IDE
-.vscode/
 .idea/
+.vscode/
 *.swp
 *.swo
 *~
-
-# OS
 .DS_Store
-Thumbs.db
 
 # Build
-dist/
-build/
 target/
+build/
+dist/
+
+# Dependencies
+node_modules/
+package-lock.json
 
 # Environment
 .env
 .env.local
+
+# HTTPS Keystore (auto-generated during build)
+src/main/resources/keystore.p12

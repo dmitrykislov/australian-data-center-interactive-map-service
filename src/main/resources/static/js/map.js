@@ -5,6 +5,8 @@
 
 import { createPopup } from './popup.js';
 import { initializeMarkerKeyboardNavigation } from './marker-keyboard-navigation.js';
+import { initializeAttribution, validateAttributions } from './attribution.js';
+import { trackPageView, trackApiCall } from './analytics.js';
 
 const MAP_CONFIG = {
     center: [20, 0],
@@ -61,6 +63,17 @@ export async function initializeMap() {
         // Initialize marker keyboard navigation
         initializeMarkerKeyboardNavigation(map, markers, dataCenters, showFacilityPopup);
         
+        // Initialize attribution
+        initializeAttribution(map);
+        
+        // Track page view
+        trackPageView('/');
+        
+        // Validate attribution is present
+        if (!validateAttributions()) {
+            console.warn('Attribution validation failed - some sources may not be properly credited');
+        }
+        
         console.log(`Map initialized with ${dataCenters.length} data centers`);
     } catch (error) {
         console.error('Failed to initialize map:', error);
@@ -74,6 +87,7 @@ export async function initializeMap() {
 async function loadDataCenters() {
     try {
         const response = await fetch('/api/v1/datacenters');
+        trackApiCall('/api/v1/datacenters', response.status);
         if (!response.ok) {
             throw new Error(`API returned status ${response.status}`);
         }

@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  ssl:
+    enabled: false
+
+spring:
+  application:
+    name: datacenter-mapping-test
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 2000
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  security:
+    require-ssl: false
+
+logging:
+  level:
+    root: WARN
+    com.datacenter: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

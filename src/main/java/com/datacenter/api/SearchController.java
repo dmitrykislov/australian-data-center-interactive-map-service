@@ -3,90 +3,119 @@ package com.datacenter.api;
 import com.datacenter.search.SearchQuery;
 import com.datacenter.search.SearchResult;
 import com.datacenter.search.SearchService;
-import java.util.List;
-import java.util.Objects;
-import org.springframework.http.HttpStatus;
+import com.datacenter.validation.InputValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 /**
- * REST API controller for search and autocomplete endpoints.
- * Provides endpoints for searching data centers and getting autocomplete suggestions.
+ * REST API controller for search endpoints.
+ * Provides search and autocomplete functionality for data centers.
  */
 @RestController
 @RequestMapping("/api/v1/search")
 public class SearchController {
 
   private final SearchService searchService;
+  private final InputValidator inputValidator;
 
   /**
-   * Creates a SearchController with the given SearchService.
+   * Creates a SearchController with the given dependencies.
    *
    * @param searchService the search service
+   * @param inputValidator the input validator
    */
-  public SearchController(SearchService searchService) {
+  @Autowired
+  public SearchController(SearchService searchService, InputValidator inputValidator) {
     this.searchService = Objects.requireNonNull(searchService);
+    this.inputValidator = Objects.requireNonNull(inputValidator);
   }
 
   /**
-   * Searches for data centers matching the query.
-   * Returns results within 200ms SLA with case-insensitive partial matching.
+   * Searches data centers by query string.
    *
-   * @param query the search query (required)
-   * @param limit maximum number of results (default: 20, max: 100)
-   * @param offset number of results to skip (default: 0)
-   * @return search results with pagination metadata
+   * @param query the search query
+   * @param limit the maximum number of results (default: 20, max: 100)
+   * @param offset the offset for pagination (default: 0)
+   * @return search results
    */
   @GetMapping
-  public ResponseEntity<SearchResult> search(
-      @RequestParam(name = "q", required = true) String query,
+  public ResponseEntity<Map<String, Object>> search(
+      @RequestParam(name = "q", defaultValue = "") String query,
       @RequestParam(name = "limit", defaultValue = "20") int limit,
       @RequestParam(name = "offset", defaultValue = "0") int offset) {
-
-    try {
-      SearchQuery searchQuery = new SearchQuery(query, limit, offset);
-      SearchResult result = searchService.search(searchQuery);
-
-      // Verify 200ms SLA
-      if (result.getExecutionTimeMs() > 200) {
-        // Log warning but still return result
-      }
-
-      return ResponseEntity.ok(result);
-    } catch (IllegalArgumentException e) {
-      return ResponseEntity.badRequest().build();
+    // Validate parameters - limit must be 1-100 for SearchQuery
+    if (limit < 1 || limit > 100) {
+      throw new IllegalArgumentException("Limit must be between 1 and 100");
     }
+    if (offset < 0) {
+      throw new IllegalArgumentException("Offset must be non-negative");
+    }
+
+    // Empty queries are allowed - no validation needed for empty string
+    // Only validate non-empty queries
+    if (query != null && !query.isEmpty() && !query.trim().isEmpty()) {
+      inputValidator.validateSearchQuery(query);
+    }
+
+    // Perform search
+    SearchQuery searchQuery = new SearchQuery(query, limit, offset);
+    SearchResult result = searchService.search(searchQuery);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("results", result.getResults());
+    response.put("total", result.getResults().size());
+    response.put("limit", limit);
+    response.put("offset", offset);
+
+    return ResponseEntity.ok(response);
   }
 
   /**
-   * Gets autocomplete suggestions for the given query.
-   * Returns suggestions as user types with case-insensitive matching.
+   * Provides autocomplete suggestions for search queries.
    *
-   * @param q the partial query string (required)
-   * @param limit maximum number of suggestions (default: 10, max: 100)
-   * @return list of matching facility names
+   * @param query the partial search query
+   * @param limit the maximum number of suggestions (default: 10)
+   * @return autocomplete suggestions
    */
   @GetMapping("/autocomplete")
-  public ResponseEntity<List<String>> autocomplete(
-      @RequestParam(name = "q", required = true) String q,
+  public ResponseEntity<Map<String, Object>> autocomplete(
+      @RequestParam(name = "q", defaultValue = "") String query,
       @RequestParam(name = "limit", defaultValue = "10") int limit) {
-
-    try {
-      if (q == null || q.trim().isEmpty()) {
-        return ResponseEntity.badRequest().build();
-      }
-
-      if (limit < 1 || limit > 100) {
-        return ResponseEntity.badRequest().build();
-      }
-
-      List<String> suggestions = searchService.getAutocompleteSuggestions(q, limit);
-      return ResponseEntity.ok(suggestions);
-    } catch (IllegalArgumentException e) {
-      return ResponseEntity.badRequest().build();
+    // Validate parameters - limit must be 1-100 for SearchQuery
+    if (limit < 1 || limit > 100) {
+      throw new IllegalArgumentException("Limit must be between 1 and 100");
     }
+
+    // Empty queries are allowed - no validation needed for empty string
+    // Only validate non-empty queries
+    if (query != null && !query.isEmpty() && !query.trim().isEmpty()) {
+      inputValidator.validateSearchQuery(query);
+    }
+
+    // Get autocomplete suggestions using search
+    SearchQuery searchQuery = new SearchQuery(query, limit, 0);
+    SearchResult result = searchService.search(searchQuery);
+    
+    // Extract unique names/operators as suggestions
+    List<String> suggestions = result.getResults().stream()
+        .map(dc -> dc.getName())
+        .distinct()
+        .limit(limit)
+        .toList();
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("suggestions", suggestions);
+    response.put("query", query);
+
+    return ResponseEntity.ok(response);
   }
 }
