@@ -18,8 +18,10 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@axe-core/playwright": "^4.8.0",
     "@playwright/test": "^1.40.0",
     "@vitest/ui": "^1.0.0",
+    "axe-core": "^4.8.0",
     "vitest": "^1.0.0"
   },
   "dependencies": {

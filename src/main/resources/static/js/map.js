@@ -105,13 +105,18 @@ function createMarker(dc) {
     const { latitude, longitude } = dc.coordinates;
     const status = dc.status.toLowerCase();
     
+    // Create marker with valid Leaflet options only.
+    // Keyboard navigation is handled by Leaflet's native keyboard support:
+    // - Leaflet automatically makes the map focusable and handles arrow keys for panning
+    // - Markers are accessible via the map's focus and can be interacted with via click/touch
+    // - For keyboard-only users, the map container receives focus and keyboard events
     const marker = L.marker([latitude, longitude], {
         title: dc.name,
-        alt: dc.name,
+        alt: `${dc.name} - ${status}`,
         className: `marker-${status}`
     });
     
-    // Add click handler for popup
+    // Add click handler for popup (works for both mouse and touch)
     marker.on('click', () => {
         showFacilityPopup(dc);
     });

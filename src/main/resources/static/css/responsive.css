@@ -1,0 +1,303 @@
+/**
+ * Responsive design styles for mobile, tablet, and desktop viewports.
+ * Supports screens from 320px to 2560px width.
+ */
+
+/* Base mobile-first styles (320px and up) */
+html, body {
+    font-size: 16px;
+}
+
+.map-container {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+}
+
+.popup-visible {
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    max-height: 80dvh;
+}
+
+.popup-header {
+    flex-direction: column;
+    gap: 12px;
+}
+
+.popup-title {
+    font-size: 20px;
+    word-break: break-word;
+}
+
+.popup-content {
+    font-size: 14px;
+}
+
+.popup-field {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.popup-field-label {
+    font-size: 12px;
+}
+
+.popup-field-value {
+    font-size: 13px;
+    text-align: left;
+    max-width: 100%;
+}
+
+.popup-specs-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.popup-spec-item {
+    padding: 12px;
+}
+
+.popup-spec-label {
+    font-size: 11px;
+}
+
+.popup-spec-value {
+    font-size: 16px;
+}
+
+/* Tablet styles (600px and up) */
+@media (min-width: 600px) {
+    .popup-visible {
+        width: 85%;
+        max-width: 550px;
+    }
+
+    .popup-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0;
+    }
+
+    .popup-title {
+        font-size: 22px;
+    }
+
+    .popup-content {
+        font-size: 14px;
+    }
+
+    .popup-field {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .popup-field-value {
+        text-align: right;
+        max-width: 60%;
+    }
+
+    .popup-specs-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Tablet large styles (768px and up) */
+@media (min-width: 768px) {
+    html, body {
+        font-size: 16px;
+    }
+
+    .popup-visible {
+        width: 80%;
+        max-width: 600px;
+    }
+
+    .popup-title {
+        font-size: 24px;
+    }
+
+    .popup-specs-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .popup-spec-item {
+        padding: 16px;
+    }
+}
+
+/* Desktop styles (1024px and up) */
+@media (min-width: 1024px) {
+    .popup-visible {
+        width: 75%;
+        max-width: 650px;
+    }
+
+    .popup-title {
+        font-size: 26px;
+    }
+
+    .popup-content {
+        font-size: 15px;
+    }
+
+    .popup-field-label {
+        font-size: 13px;
+    }
+
+    .popup-field-value {
+        font-size: 14px;
+    }
+
+    .popup-specs-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .popup-spec-item {
+        padding: 20px;
+    }
+
+    .popup-spec-label {
+        font-size: 12px;
+    }
+
+    .popup-spec-value {
+        font-size: 20px;
+    }
+}
+
+/* Large desktop styles (1280px and up) */
+@media (min-width: 1280px) {
+    .popup-visible {
+        width: 70%;
+        max-width: 700px;
+    }
+
+    .popup-title {
+        font-size: 28px;
+    }
+}
+
+/* Extra large desktop styles (1920px and up) */
+@media (min-width: 1920px) {
+    .popup-visible {
+        width: 60%;
+        max-width: 800px;
+    }
+
+    .popup-title {
+        font-size: 30px;
+    }
+
+    .popup-content {
+        font-size: 16px;
+    }
+
+    .popup-specs-grid {
+        gap: 24px;
+    }
+
+    .popup-spec-item {
+        padding: 24px;
+    }
+}
+
+/* Ultra-wide desktop styles (2560px and up) */
+@media (min-width: 2560px) {
+    .popup-visible {
+        width: 50%;
+        max-width: 900px;
+    }
+
+    .popup-title {
+        font-size: 32px;
+    }
+
+    .popup-content {
+        font-size: 17px;
+    }
+
+    .popup-field-label {
+        font-size: 14px;
+    }
+
+    .popup-field-value {
+        font-size: 15px;
+    }
+
+    .popup-spec-label {
+        font-size: 13px;
+    }
+
+    .popup-spec-value {
+        font-size: 22px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .popup-visible {
+        max-height: 90vh;
+        max-height: 90dvh;
+    }
+
+    .popup-content {
+        max-height: 60vh;
+        max-height: 60dvh;
+        overflow-y: auto;
+    }
+}
+
+/* High DPI screens */
+@media (min-resolution: 192dpi) {
+    .popup-visible {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .popup-visible {
+        animation: none;
+    }
+
+    .popup-close-btn {
+        transition: none;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .popup-close-btn {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
+    }
+
+    .popup-field {
+        padding: 12px 0;
+    }
+}
+
+/* Print styles */
+@media print {
+    .popup-overlay {
+        display: none;
+    }
+
+    .popup-visible {
+        position: static;
+        transform: none;
+        box-shadow: none;
+        max-width: 100%;
+        max-height: 100%;
+    }
+}

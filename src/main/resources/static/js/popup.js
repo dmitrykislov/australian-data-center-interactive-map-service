@@ -28,8 +28,8 @@ export function generatePopupContent(facility) {
     
     let html = `
         <div class="popup-header">
-            <h2 class="popup-title">${escapeHtml(facility.name)}</h2>
-            <button class="popup-close-btn" aria-label="Close popup">×</button>
+            <h2 class="popup-title" id="popup-title">${escapeHtml(facility.name)}</h2>
+            <button class="popup-close-btn" aria-label="Close facility details popup" title="Close (Escape key)">×</button>
         </div>
         <div class="popup-content">
             <div class="popup-section">
@@ -214,6 +214,12 @@ export function createPopup(facility, container, onClose) {
     };
     
     closeBtn.addEventListener('click', closeHandler);
+    closeBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            closeHandler();
+        }
+    });
     overlay.addEventListener('click', closeHandler);
     
     // Prevent closing when clicking inside popup
@@ -223,6 +229,11 @@ export function createPopup(facility, container, onClose) {
     
     // Add Escape key listener
     document.addEventListener('keydown', escapeHandler);
+    
+    // Focus close button for keyboard navigation
+    setTimeout(() => {
+        closeBtn.focus();
+    }, 0);
     
     const endTime = performance.now();
     const renderTime = endTime - startTime;
