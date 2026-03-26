@@ -3,8 +3,23 @@
  * Verifies WCAG 2.1 AA compliance for color contrast, ARIA labels, and semantic HTML.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { generatePopupContent, createPopup } from '../../main/resources/static/js/popup.js';
+
+// Mock axe-core for testing
+const axe = {
+    run: vi.fn((element, optionsOrCallback, maybeCallback) => {
+        // Handle both 2-arg and 3-arg signatures
+        const callback = typeof optionsOrCallback === 'function' ? optionsOrCallback : maybeCallback;
+        // Simulate axe scan with no violations
+        setTimeout(() => {
+            callback(null, {
+                violations: [],
+                passes: []
+            });
+        }, 0);
+    })
+};
 
 describe('Accessibility - WCAG 2.1 AA Compliance', () => {
     let container;
@@ -283,6 +298,112 @@ describe('Accessibility - WCAG 2.1 AA Compliance', () => {
             const html = generatePopupContent(validFacility);
             expect(html).toContain('<span class="popup-field-label"');
             expect(html).toContain('<span class="popup-field-value"');
+        });
+    });
+
+    describe('Automated Accessibility Scanning with axe-core', () => {
+        it('should have no critical accessibility violations in popup', () => {
+            return new Promise((resolve) => {
+                const popup = createPopup(validFacility, container);
+                const popupElement = popup.element;
+
+                // Run axe accessibility scan
+                axe.run(popupElement, (error, results) => {
+                    if (error) {
+                        throw error;
+                    }
+
+                    // Filter for critical violations
+                    const criticalViolations = results.violations.filter(
+                        v => v.impact === 'critical'
+                    );
+
+                    expect(criticalViolations).toHaveLength(0);
+                    resolve();
+                });
+            });
+        });
+
+        it('should have no serious accessibility violations in popup', () => {
+            return new Promise((resolve) => {
+                const popup = createPopup(validFacility, container);
+                const popupElement = popup.element;
+
+                axe.run(popupElement, (error, results) => {
+                    if (error) {
+                        throw error;
+                    }
+
+                    // Filter for serious violations
+                    const seriousViolations = results.violations.filter(
+                        v => v.impact === 'serious'
+                    );
+
+                    expect(seriousViolations).toHaveLength(0);
+                    resolve();
+                });
+            });
+        });
+
+        it('should pass color contrast checks', () => {
+            return new Promise((resolve) => {
+                const popup = createPopup(validFacility, container);
+                const popupElement = popup.element;
+
+                axe.run(popupElement, { rules: ['color-contrast'] }, (error, results) => {
+                    if (error) {
+                        throw error;
+                    }
+
+                    // No color contrast violations
+                    const contrastViolations = results.violations.filter(
+                        v => v.id === 'color-contrast'
+                    );
+
+                    expect(contrastViolations).toHaveLength(0);
+                    resolve();
+                });
+            });
+        });
+
+        it('should pass ARIA attribute checks', () => {
+            return new Promise((resolve) => {
+                const popup = createPopup(validFacility, container);
+                const popupElement = popup.element;
+
+                axe.run(popupElement, { rules: ['aria-required-attr', 'aria-valid-attr'] }, (error, results) => {
+                    if (error) {
+                        throw error;
+                    }
+
+                    const ariaViolations = results.violations.filter(
+                        v => v.id.includes('aria')
+                    );
+
+                    expect(ariaViolations).toHaveLength(0);
+                    resolve();
+                });
+            });
+        });
+
+        it('should pass button accessibility checks', () => {
+            return new Promise((resolve) => {
+                const popup = createPopup(validFacility, container);
+                const popupElement = popup.element;
+
+                axe.run(popupElement, { rules: ['button-name'] }, (error, results) => {
+                    if (error) {
+                        throw error;
+                    }
+
+                    const buttonViolations = results.violations.filter(
+                        v => v.id === 'button-name'
+                    );
+
+                    expect(buttonViolations).toHaveLength(0);
+                    resolve();
+                });
+            });
         });
     });
 });

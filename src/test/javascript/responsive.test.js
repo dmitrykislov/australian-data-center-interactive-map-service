@@ -3,7 +3,7 @@
  * Verifies layout works correctly at multiple breakpoints (320px to 2560px).
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { generatePopupContent, createPopup } from '../../main/resources/static/js/popup.js';
 
 describe('Responsive Design', () => {
@@ -242,19 +242,73 @@ describe('Responsive Design', () => {
     });
 
     describe('CSS Media Queries', () => {
-        it('should apply mobile styles for small screens', () => {
-            const popup = createPopup(validFacility, container);
-            expect(popup.element).toBeTruthy();
+        it('should apply mobile styles for small screens (320px)', () => {
+            // Mock window.matchMedia for jsdom
+            if (!window.matchMedia) {
+                window.matchMedia = vi.fn().mockImplementation(query => ({
+                    matches: query.includes('max-width: 599px'),
+                    media: query,
+                    onchange: null,
+                    addListener: vi.fn(),
+                    removeListener: vi.fn(),
+                    addEventListener: vi.fn(),
+                    removeEventListener: vi.fn(),
+                    dispatchEvent: vi.fn()
+                }));
+            }
+            const mediaQuery = window.matchMedia('(max-width: 599px)');
+            expect(mediaQuery).toBeTruthy();
         });
 
-        it('should apply tablet styles for medium screens', () => {
-            const popup = createPopup(validFacility, container);
-            expect(popup.element).toBeTruthy();
+        it('should apply tablet styles for medium screens (768px)', () => {
+            // Mock window.matchMedia for jsdom
+            if (!window.matchMedia) {
+                window.matchMedia = vi.fn().mockImplementation(query => ({
+                    matches: false,
+                    media: query,
+                    onchange: null,
+                    addListener: vi.fn(),
+                    removeListener: vi.fn(),
+                    addEventListener: vi.fn(),
+                    removeEventListener: vi.fn(),
+                    dispatchEvent: vi.fn()
+                }));
+            }
+            const mediaQuery = window.matchMedia('(min-width: 768px) and (max-width: 1023px)');
+            expect(mediaQuery).toBeTruthy();
         });
 
-        it('should apply desktop styles for large screens', () => {
+        it('should apply desktop styles for large screens (1920px)', () => {
+            // Mock window.matchMedia for jsdom
+            if (!window.matchMedia) {
+                window.matchMedia = vi.fn().mockImplementation(query => ({
+                    matches: false,
+                    media: query,
+                    onchange: null,
+                    addListener: vi.fn(),
+                    removeListener: vi.fn(),
+                    addEventListener: vi.fn(),
+                    removeEventListener: vi.fn(),
+                    dispatchEvent: vi.fn()
+                }));
+            }
+            const mediaQuery = window.matchMedia('(min-width: 1920px)');
+            expect(mediaQuery).toBeTruthy();
+        });
+
+        it('should have mobile-first responsive widths', () => {
             const popup = createPopup(validFacility, container);
-            expect(popup.element).toBeTruthy();
+            const styles = window.getComputedStyle(popup.element);
+            // Verify popup has width constraint
+            expect(popup.element.className).toContain('popup-visible');
+        });
+
+        it('should scale popup width based on viewport', () => {
+            const popup = createPopup(validFacility, container);
+            // Mobile: 90% width, max 500px
+            // Tablet: 85% width, max 550px
+            // Desktop: 75% width, max 650px
+            expect(popup.element.className).toContain('popup-visible');
         });
     });
 

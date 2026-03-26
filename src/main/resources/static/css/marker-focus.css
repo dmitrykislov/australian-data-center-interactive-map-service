@@ -1,0 +1,115 @@
+/**
+ * Marker focus and keyboard navigation styles for WCAG 2.1 AA compliance.
+ * Provides visible focus indicators for keyboard-navigated markers.
+ */
+
+/* Marker focus indicator */
+.leaflet-marker-icon.marker-focused {
+    filter: drop-shadow(0 0 8px #1976d2) drop-shadow(0 0 4px rgba(25, 118, 210, 0.8));
+    outline: 3px solid #1976d2;
+    outline-offset: 2px;
+    z-index: 1001;
+}
+
+/* Ensure marker is keyboard accessible */
+.leaflet-marker-icon {
+    transition: filter 0.2s ease, outline 0.2s ease;
+}
+
+.leaflet-marker-icon:focus {
+    outline: 3px solid #1976d2;
+    outline-offset: 2px;
+}
+
+.leaflet-marker-icon:focus-visible {
+    outline: 3px solid #1976d2;
+    outline-offset: 2px;
+    filter: drop-shadow(0 0 8px #1976d2);
+}
+
+/* Screen reader only announcement region */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Map container keyboard focus */
+#map:focus {
+    outline: 3px solid #1976d2;
+    outline-offset: 2px;
+}
+
+#map:focus-visible {
+    outline: 3px solid #1976d2;
+    outline-offset: 2px;
+}
+
+/* Ensure marker cluster groups are also keyboard accessible */
+.leaflet-cluster-anim {
+    transition: transform 0.3s ease;
+}
+
+/* High contrast mode support for marker focus */
+@media (prefers-contrast: more) {
+    .leaflet-marker-icon.marker-focused {
+        outline: 4px solid #1a1a1a;
+        outline-offset: 3px;
+        filter: drop-shadow(0 0 10px #1a1a1a);
+    }
+
+    .leaflet-marker-icon:focus-visible {
+        outline: 4px solid #1a1a1a;
+        outline-offset: 3px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .leaflet-marker-icon {
+        transition: none;
+    }
+
+    .leaflet-marker-icon.marker-focused {
+        animation: none;
+    }
+}
+
+/* Dark mode support for marker focus */
+@media (prefers-color-scheme: dark) {
+    .leaflet-marker-icon.marker-focused {
+        filter: drop-shadow(0 0 8px #64b5f6) drop-shadow(0 0 4px rgba(100, 181, 246, 0.8));
+        outline-color: #64b5f6;
+    }
+
+    .leaflet-marker-icon:focus-visible {
+        outline-color: #64b5f6;
+        filter: drop-shadow(0 0 8px #64b5f6);
+    }
+
+    #map:focus,
+    #map:focus-visible {
+        outline-color: #64b5f6;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .leaflet-marker-icon.marker-focused {
+        filter: drop-shadow(0 0 10px #1976d2) drop-shadow(0 0 6px rgba(25, 118, 210, 0.9));
+        outline-width: 4px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .leaflet-marker-icon.marker-focused {
+        outline: 2px solid #000;
+    }
+}

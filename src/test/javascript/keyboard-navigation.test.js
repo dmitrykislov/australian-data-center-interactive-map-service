@@ -6,7 +6,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { generatePopupContent, createPopup } from '../../main/resources/static/js/popup.js';
 
-describe('Keyboard Navigation', () => {
+describe('Keyboard Navigation - Popup', () => {
     let container;
     let validFacility;
 

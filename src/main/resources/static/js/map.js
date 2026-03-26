@@ -4,6 +4,7 @@
  */
 
 import { createPopup } from './popup.js';
+import { initializeMarkerKeyboardNavigation } from './marker-keyboard-navigation.js';
 
 const MAP_CONFIG = {
     center: [20, 0],
@@ -57,6 +58,9 @@ export async function initializeMap() {
             fitMapBounds();
         }
         
+        // Initialize marker keyboard navigation
+        initializeMarkerKeyboardNavigation(map, markers, dataCenters, showFacilityPopup);
+        
         console.log(`Map initialized with ${dataCenters.length} data centers`);
     } catch (error) {
         console.error('Failed to initialize map:', error);
@@ -105,15 +109,13 @@ function createMarker(dc) {
     const { latitude, longitude } = dc.coordinates;
     const status = dc.status.toLowerCase();
     
-    // Create marker with valid Leaflet options only.
-    // Keyboard navigation is handled by Leaflet's native keyboard support:
-    // - Leaflet automatically makes the map focusable and handles arrow keys for panning
-    // - Markers are accessible via the map's focus and can be interacted with via click/touch
-    // - For keyboard-only users, the map container receives focus and keyboard events
+    // Create marker with valid Leaflet options.
+    // Keyboard navigation is implemented via marker-keyboard-navigation.js
     const marker = L.marker([latitude, longitude], {
         title: dc.name,
         alt: `${dc.name} - ${status}`,
-        className: `marker-${status}`
+        className: `marker-${status}`,
+        keyboard: true
     });
     
     // Add click handler for popup (works for both mouse and touch)
