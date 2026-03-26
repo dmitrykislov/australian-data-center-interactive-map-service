@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DataCenter Schema",
+  "description": "JSON schema for validating data center entities",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "operator",
+    "coordinates",
+    "capacity",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (UUID) for the data center",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the data center",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "operator": {
+      "type": "string",
+      "description": "Organization operating the data center",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "coordinates": {
+      "type": "object",
+      "description": "Geographic location of the data center",
+      "required": [
+        "latitude",
+        "longitude"
+      ],
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "description": "Latitude coordinate",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Longitude coordinate",
+          "minimum": -180,
+          "maximum": 180
+        }
+      },
+      "additionalProperties": false
+    },
+    "capacity": {
+      "type": "integer",
+      "description": "Power capacity in megawatts (MW)",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "description": "Current operational status",
+      "enum": [
+        "operational",
+        "maintenance",
+        "planned",
+        "decommissioned"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional description of the data center",
+      "maxLength": 1000
+    },
+    "tags": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional comma-separated tags for categorization",
+      "maxLength": 500
+    }
+  },
+  "additionalProperties": false
+}
