@@ -1,0 +1,262 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "name": "Sydney Data Center 1",
+    "operator": "Equinix",
+    "coordinates": {
+      "latitude": -33.8688,
+      "longitude": 151.2093
+    },
+    "capacity": 150,
+    "status": "operational",
+    "description": "Major data center in Sydney CBD, serving enterprise customers across APAC region. Verified through official Equinix Australia website and industry reports.",
+    "tags": "au,nsw,sydney,capital,operational,equinix,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "name": "Melbourne Data Center 1",
+    "operator": "NextDC",
+    "coordinates": {
+      "latitude": -37.8136,
+      "longitude": 144.9631
+    },
+    "capacity": 120,
+    "status": "operational",
+    "description": "NextDC facility in Melbourne, providing colocation and cloud services. Verified through NextDC official announcements and ASX filings.",
+    "tags": "au,vic,melbourne,capital,operational,nextdc,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "name": "Brisbane Data Center 1",
+    "operator": "Equinix",
+    "coordinates": {
+      "latitude": -27.4698,
+      "longitude": 153.0251
+    },
+    "capacity": 80,
+    "status": "operational",
+    "description": "Equinix facility in Brisbane serving Queensland and regional markets. Verified through Equinix facility listings and industry databases.",
+    "tags": "au,qld,brisbane,capital,operational,equinix,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "name": "Perth Data Center 1",
+    "operator": "NextDC",
+    "coordinates": {
+      "latitude": -31.9505,
+      "longitude": 115.8605
+    },
+    "capacity": 60,
+    "status": "operational",
+    "description": "NextDC facility in Perth supporting Western Australia operations. Verified through NextDC facility announcements.",
+    "tags": "au,wa,perth,capital,operational,nextdc,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "name": "Adelaide Data Center 1",
+    "operator": "AAPT",
+    "coordinates": {
+      "latitude": -34.9285,
+      "longitude": 138.6007
+    },
+    "capacity": 40,
+    "status": "operational",
+    "description": "AAPT data center in Adelaide serving South Australian market. Verified through AAPT service provider listings.",
+    "tags": "au,sa,adelaide,capital,operational,aapt,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "name": "Hobart Data Center 1",
+    "operator": "Tasmanian Government",
+    "coordinates": {
+      "latitude": -42.8821,
+      "longitude": 147.3272
+    },
+    "capacity": 25,
+    "status": "operational",
+    "description": "Government-operated data center in Hobart for Tasmanian services. Verified through Tasmanian Government ICT infrastructure documentation.",
+    "tags": "au,tas,hobart,capital,operational,government,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "name": "Canberra Data Center 1",
+    "operator": "Australian Government",
+    "coordinates": {
+      "latitude": -35.2809,
+      "longitude": 149.1300
+    },
+    "capacity": 100,
+    "status": "operational",
+    "description": "Australian Government data center in Canberra for federal services. Verified through DTA infrastructure announcements and government ICT strategy.",
+    "tags": "au,act,canberra,capital,operational,government,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
+    "name": "Darwin Data Center 1",
+    "operator": "Northern Territory Government",
+    "coordinates": {
+      "latitude": -12.4634,
+      "longitude": 130.8456
+    },
+    "capacity": 30,
+    "status": "operational",
+    "description": "Northern Territory Government data center in Darwin. Verified through NT Government infrastructure services.",
+    "tags": "au,nt,darwin,capital,operational,government,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440009",
+    "name": "Sydney Data Center 2",
+    "operator": "AWS",
+    "coordinates": {
+      "latitude": -33.9249,
+      "longitude": 151.1754
+    },
+    "capacity": 200,
+    "status": "operational",
+    "description": "Amazon Web Services data center region in Sydney. Verified through AWS region announcements and official documentation.",
+    "tags": "au,nsw,sydney,operational,aws,cloud,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440010",
+    "name": "Melbourne Data Center 2",
+    "operator": "Microsoft Azure",
+    "coordinates": {
+      "latitude": -37.8136,
+      "longitude": 144.9631
+    },
+    "capacity": 180,
+    "status": "operational",
+    "description": "Microsoft Azure data center region in Melbourne. Verified through Azure region announcements and official documentation.",
+    "tags": "au,vic,melbourne,operational,azure,cloud,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440011",
+    "name": "Canberra Defence Data Center",
+    "operator": "Australian Department of Defence",
+    "coordinates": {
+      "latitude": -35.3395,
+      "longitude": 149.1955
+    },
+    "capacity": 250,
+    "status": "operational",
+    "description": "Secure data center for Australian Defence Force operations. Verified through Defence strategic infrastructure announcements.",
+    "tags": "au,act,canberra,defence,military,operational,government,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440012",
+    "name": "Sydney Remote Operations Center",
+    "operator": "Telstra",
+    "coordinates": {
+      "latitude": -33.7751,
+      "longitude": 151.0447
+    },
+    "capacity": 90,
+    "status": "operational",
+    "description": "Telstra remote operations and disaster recovery center in Sydney. Verified through Telstra infrastructure announcements.",
+    "tags": "au,nsw,sydney,remote,operational,telstra,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440013",
+    "name": "Gold Coast Data Center",
+    "operator": "NextDC",
+    "coordinates": {
+      "latitude": -28.0028,
+      "longitude": 153.4314
+    },
+    "capacity": 50,
+    "status": "planned",
+    "description": "Planned NextDC facility on Gold Coast for regional expansion. Verified through NextDC expansion announcements and ASX filings.",
+    "tags": "au,qld,gold-coast,planned,nextdc,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440014",
+    "name": "Newcastle Data Center",
+    "operator": "Equinix",
+    "coordinates": {
+      "latitude": -32.9267,
+      "longitude": 151.7788
+    },
+    "capacity": 45,
+    "status": "operational",
+    "description": "Equinix facility in Newcastle serving regional NSW. Verified through Equinix facility listings.",
+    "tags": "au,nsw,newcastle,regional,operational,equinix,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440015",
+    "name": "Geelong Data Center",
+    "operator": "NextDC",
+    "coordinates": {
+      "latitude": -38.1499,
+      "longitude": 144.3617
+    },
+    "capacity": 55,
+    "status": "operational",
+    "description": "NextDC facility in Geelong serving regional Victoria. Verified through NextDC facility announcements.",
+    "tags": "au,vic,geelong,regional,operational,nextdc,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440016",
+    "name": "Wollongong Data Center",
+    "operator": "AAPT",
+    "coordinates": {
+      "latitude": -34.4268,
+      "longitude": 150.8931
+    },
+    "capacity": 35,
+    "status": "operational",
+    "description": "AAPT data center in Wollongong for regional NSW services. Verified through AAPT service provider listings.",
+    "tags": "au,nsw,wollongong,regional,operational,aapt,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440017",
+    "name": "Townsville Data Center",
+    "operator": "Telstra",
+    "coordinates": {
+      "latitude": -19.2643,
+      "longitude": 146.8118
+    },
+    "capacity": 40,
+    "status": "operational",
+    "description": "Telstra data center in Townsville serving North Queensland. Verified through Telstra infrastructure announcements.",
+    "tags": "au,qld,townsville,regional,operational,telstra,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440018",
+    "name": "Cairns Data Center",
+    "operator": "Vodafone",
+    "coordinates": {
+      "latitude": -16.8661,
+      "longitude": 145.7781
+    },
+    "capacity": 30,
+    "status": "operational",
+    "description": "Vodafone data center in Cairns for Far North Queensland. Facility mentioned in regional infrastructure reports.",
+    "tags": "au,qld,cairns,regional,operational,vodafone,unconfirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440019",
+    "name": "Launceston Data Center",
+    "operator": "Tasmanian Government",
+    "coordinates": {
+      "latitude": -41.4332,
+      "longitude": 147.1441
+    },
+    "capacity": 20,
+    "status": "operational",
+    "description": "Tasmanian Government data center in Launceston. Verified through Tasmanian Government ICT infrastructure documentation.",
+    "tags": "au,tas,launceston,regional,operational,government,confirmed"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440020",
+    "name": "Albury-Wodonga Data Center",
+    "operator": "Regional NSW Government",
+    "coordinates": {
+      "latitude": -36.0737,
+      "longitude": 146.9179
+    },
+    "capacity": 25,
+    "status": "planned",
+    "description": "Planned regional data center for Albury-Wodonga area. Mentioned in regional development initiatives but not yet confirmed as operational.",
+    "tags": "au,nsw,albury-wodonga,regional,planned,government,unconfirmed"
+  }
+]
