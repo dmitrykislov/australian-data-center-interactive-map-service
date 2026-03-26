@@ -1,0 +1,37 @@
+# Optimized multi-stage Dockerfile with minimal final image
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
+
+WORKDIR /build
+
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+COPY src ./src
+COPY checkstyle.xml .
+
+RUN mvn clean package -DskipTests -B && \
+    mkdir -p /build/extracted && \
+    cd /build/extracted && \
+    jar xf /build/target/datacenter-mapping-*.jar
+
+FROM eclipse-temurin:21-jre-alpine
+
+WORKDIR /app
+
+RUN apk add --no-cache curl && \
+    addgroup -g 1000 appuser && \
+    adduser -D -u 1000 -G appuser appuser
+
+# Copy extracted JAR layers
+COPY --from=builder --chown=appuser:appuser /build/extracted/BOOT-INF/lib /app/lib
+COPY --from=builder --chown=appuser:appuser /build/extracted/BOOT-INF/classes /app
+COPY --from=builder --chown=appuser:appuser /build/extracted/META-INF /app/META-INF
+
+USER appuser
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f -k https://localhost:8443/api/datacenters || exit 1
+
+EXPOSE 8443
+
+ENTRYPOINT ["java", "-XX:+UseG1GC", "-XX:MaxRAMPercentage=75.0", "-Dspring.profiles.active=production", "-cp", "/app:/app/lib/*", "com.datacenter.DataCenterApplication"]

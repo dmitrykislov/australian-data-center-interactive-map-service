@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: datacenter-app-service
+  namespace: datacenter-mapping
+  labels:
+    app: datacenter-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: datacenter-app
+  ports:
+  - name: https
+    port: 443
+    targetPort: 8443
+    protocol: TCP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: datacenter-app-internal
+  namespace: datacenter-mapping
+  labels:
+    app: datacenter-app
+spec:
+  type: ClusterIP
+  selector:
+    app: datacenter-app
+  ports:
+  - name: https
+    port: 8443
+    targetPort: 8443
+    protocol: TCP
