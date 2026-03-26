@@ -3,6 +3,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: datacenter-app-hpa
   namespace: datacenter-mapping
+  annotations:
+    description: "HPA with custom WebSocket connections metric. Requires Prometheus and custom metrics API setup. See kubernetes/hpa-basic.yaml for fallback configuration without custom metrics."
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -26,7 +28,15 @@ spec:
         type: Utilization
         averageUtilization: 80
   # Custom metric: scale based on WebSocket connections
-  # Requires Prometheus and custom metrics API
+  # IMPORTANT: This metric requires:
+  # 1. Prometheus installed in the cluster
+  # 2. Custom Metrics API (metrics.k8s.io) configured
+  # 3. Application exposing websocket_connections metric via /actuator/prometheus
+  # 4. Prometheus scrape config targeting the application
+  #
+  # If Prometheus is not available, use kubernetes/hpa-basic.yaml instead.
+  # This configuration will fail gracefully if the metric is unavailable,
+  # but scaling will only use CPU and memory metrics.
   - type: Pods
     pods:
       metric:
@@ -55,3 +65,43 @@ spec:
         value: 4
         periodSeconds: 30
       selectPolicy: Max
+---
+# NOTE: Prometheus Setup Instructions
+# If you want to enable the custom websocket_connections metric:
+#
+# 1. Install Prometheus (if not already installed):
+#    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+#    helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
+#
+# 2. Install Custom Metrics API:
+#    kubectl apply -f https://github.com/kubernetes-sigs/custom-metrics-apiserver/releases/download/v0.12.0/custom-metrics-apiserver.yaml
+#
+# 3. Configure Prometheus scrape config to include the application:
+#    Add to Prometheus ConfigMap:
+#    - job_name: 'datacenter-app'
+#      kubernetes_sd_configs:
+#      - role: pod
+#        namespaces:
+#          names:
+#          - datacenter-mapping
+#      relabel_configs:
+#      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+#        action: keep
+#        regex: true
+#      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+#        action: replace
+#        target_label: __param_target
+#      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+#        action: replace
+#        target_label: __param_module
+#        regex: (.+)
+#      - target_label: __address__
+#        replacement: localhost:9090
+#
+# 4. Verify the metric is available:
+#    kubectl port-forward -n monitoring svc/prometheus-operated 9090:9090
+#    Visit http://localhost:9090 and search for "websocket_connections"
+#
+# 5. Verify HPA can access the metric:
+#    kubectl get hpa -n datacenter-mapping
+#    kubectl describe hpa datacenter-app-hpa -n datacenter-mapping

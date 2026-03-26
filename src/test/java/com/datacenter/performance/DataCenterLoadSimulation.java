@@ -164,6 +164,10 @@ public class DataCenterLoadSimulation extends Simulation {
         .protocols(httpProtocol)
         .assertions(
             // Global assertions for all requests
-            global().successfulRequests().percent().is(100.0));
+            global().successfulRequests().percent().is(100.0),
+            // SLA response time assertions (acceptance criteria)
+            global().responseTime().percentile(99.0).lt(200),
+            global().responseTime().percentile(95.0).lt(150),
+            global().responseTime().percentile(50.0).lt(50));
   }
 }
