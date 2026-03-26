@@ -366,4 +366,52 @@ class DataCenterJsonSchemaTest {
     var messages = schema.validate(json);
     assertFalse(messages.isEmpty(), "Should have validation messages");
   }
+
+  @Test
+  @DisplayName("should accept uppercase UUID in JSON")
+  void testAcceptUppercaseUuidInJson() {
+    String uppercaseId = "550E8400-E29B-41D4-A716-446655440000";
+    String json =
+        String.format(
+            """
+            {
+              "id": "%s",
+              "name": "NYC Data Center",
+              "operator": "TechCorp",
+              "coordinates": {
+                "latitude": 40.7128,
+                "longitude": -74.0060
+              },
+              "capacity": 500,
+              "status": "operational"
+            }
+            """,
+            uppercaseId);
+
+    assertTrue(schema.isValid(json), "Should accept uppercase UUID");
+  }
+
+  @Test
+  @DisplayName("should accept mixed case UUID in JSON")
+  void testAcceptMixedCaseUuidInJson() {
+    String mixedCaseId = "550e8400-E29B-41d4-A716-446655440000";
+    String json =
+        String.format(
+            """
+            {
+              "id": "%s",
+              "name": "NYC Data Center",
+              "operator": "TechCorp",
+              "coordinates": {
+                "latitude": 40.7128,
+                "longitude": -74.0060
+              },
+              "capacity": 500,
+              "status": "operational"
+            }
+            """,
+            mixedCaseId);
+
+    assertTrue(schema.isValid(json), "Should accept mixed case UUID");
+  }
 }

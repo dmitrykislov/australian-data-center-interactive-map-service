@@ -107,6 +107,38 @@ class DataCenterTest {
   }
 
   @Test
+  @DisplayName("should normalize uppercase UUID to lowercase")
+  void testNormalizeUppercaseUuid() {
+    String uppercaseId = "550E8400-E29B-41D4-A716-446655440000";
+    DataCenter dc =
+        new DataCenter(
+            uppercaseId,
+            "NYC Data Center",
+            "TechCorp",
+            validCoordinates,
+            500,
+            DataCenterStatus.OPERATIONAL);
+
+    assertEquals(uppercaseId.toLowerCase(), dc.getId());
+  }
+
+  @Test
+  @DisplayName("should accept mixed case UUID and normalize to lowercase")
+  void testAcceptMixedCaseUuid() {
+    String mixedCaseId = "550e8400-E29B-41d4-A716-446655440000";
+    DataCenter dc =
+        new DataCenter(
+            mixedCaseId,
+            "NYC Data Center",
+            "TechCorp",
+            validCoordinates,
+            500,
+            DataCenterStatus.OPERATIONAL);
+
+    assertEquals(mixedCaseId.toLowerCase(), dc.getId());
+  }
+
+  @Test
   @DisplayName("should reject null name")
   void testRejectNullName() {
     assertThrows(

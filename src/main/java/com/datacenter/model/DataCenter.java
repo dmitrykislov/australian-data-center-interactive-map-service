@@ -60,14 +60,14 @@ public class DataCenter {
     if (id == null || id.trim().isEmpty()) {
       throw new IllegalArgumentException("DataCenter id cannot be null or empty");
     }
-    // Validate UUID format
+    // Validate UUID format and normalize to lowercase
     try {
       UUID.fromString(id);
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException(
           String.format("DataCenter id must be a valid UUID, got: %s", id), e);
     }
-    return id;
+    return id.toLowerCase();
   }
 
   private static String validateName(String name) {

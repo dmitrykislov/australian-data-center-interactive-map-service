@@ -364,4 +364,54 @@ class DataCenterSerializationTest {
     assertEquals(specialName, deserialized.getName());
     assertEquals(specialOperator, deserialized.getOperator());
   }
+
+  @Test
+  @DisplayName("should normalize uppercase UUID during deserialization")
+  void testNormalizeUppercaseUuidDuringSerialization() throws Exception {
+    String uppercaseId = "550E8400-E29B-41D4-A716-446655440000";
+    String json =
+        String.format(
+            """
+            {
+              "id": "%s",
+              "name": "NYC Data Center",
+              "operator": "TechCorp",
+              "coordinates": {
+                "latitude": 40.7128,
+                "longitude": -74.0060
+              },
+              "capacity": 500,
+              "status": "operational"
+            }
+            """,
+            uppercaseId);
+
+    DataCenter dc = objectMapper.readValue(json, DataCenter.class);
+    assertEquals(uppercaseId.toLowerCase(), dc.getId());
+  }
+
+  @Test
+  @DisplayName("should accept mixed case UUID and normalize during deserialization")
+  void testAcceptMixedCaseUuidDuringSerialization() throws Exception {
+    String mixedCaseId = "550e8400-E29B-41d4-A716-446655440000";
+    String json =
+        String.format(
+            """
+            {
+              "id": "%s",
+              "name": "NYC Data Center",
+              "operator": "TechCorp",
+              "coordinates": {
+                "latitude": 40.7128,
+                "longitude": -74.0060
+              },
+              "capacity": 500,
+              "status": "operational"
+            }
+            """,
+            mixedCaseId);
+
+    DataCenter dc = objectMapper.readValue(json, DataCenter.class);
+    assertEquals(mixedCaseId.toLowerCase(), dc.getId());
+  }
 }
