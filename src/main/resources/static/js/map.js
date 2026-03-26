@@ -91,7 +91,8 @@ async function loadDataCenters() {
         if (!response.ok) {
             throw new Error(`API returned status ${response.status}`);
         }
-        dataCenters = await response.json();
+        const data = await response.json();
+        dataCenters = data.dataCenters || [];
     } catch (error) {
         console.error('Failed to load data centers:', error);
         dataCenters = [];

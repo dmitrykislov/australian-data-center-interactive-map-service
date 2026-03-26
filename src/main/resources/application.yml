@@ -15,15 +15,16 @@ server:
 spring:
   application:
     name: datacenter-mapping
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
-    timeout: 2000
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-        min-idle: 0
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: 2000
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
   jackson:
     serialization:
       write-dates-as-timestamps: false
@@ -36,5 +37,6 @@ logging:
   level:
     root: INFO
     com.datacenter: DEBUG
+    org.apache.tomcat.util.http.parser.Cookie: ERROR
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

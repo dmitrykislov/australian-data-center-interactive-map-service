@@ -70,10 +70,10 @@ public class AnalyticsService {
             listOps.rightPush(PAGE_VIEWS_KEY, eventJson);
             redisTemplate.expire(PAGE_VIEWS_KEY, Duration.ofDays(ANALYTICS_TTL_DAYS));
 
-            logger.debug("Tracked page view: path={}, referrer={}, userAgentType={}", 
+            logger.debug("Tracked page view: path={}, referrer={}, userAgentType={}",
                 pagePath, referrer, userAgentType);
         } catch (Exception e) {
-            logger.error("Error tracking page view", e);
+            logger.warn("Analytics unavailable - could not track page view: {}", e.getMessage());
         }
     }
 
@@ -113,10 +113,10 @@ public class AnalyticsService {
             listOps.rightPush(API_CALLS_KEY, eventJson);
             redisTemplate.expire(API_CALLS_KEY, Duration.ofDays(ANALYTICS_TTL_DAYS));
 
-            logger.debug("Tracked API call: endpoint={}, statusCode={}, responseTimeMs={}", 
+            logger.debug("Tracked API call: endpoint={}, statusCode={}, responseTimeMs={}",
                 endpoint, statusCode, responseTimeMs);
         } catch (Exception e) {
-            logger.error("Error tracking API call", e);
+            logger.warn("Analytics unavailable - could not track API call: {}", e.getMessage());
         }
     }
 
@@ -142,7 +142,7 @@ public class AnalyticsService {
 
             logger.debug("Tracked error: type={}, message={}", errorType, errorMessage);
         } catch (Exception e) {
-            logger.error("Error tracking error event", e);
+            logger.warn("Analytics unavailable - could not track error event: {}", e.getMessage());
         }
     }
 

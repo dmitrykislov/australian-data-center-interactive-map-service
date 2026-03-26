@@ -58,9 +58,8 @@ public class DataCenterController {
       throw new IllegalArgumentException("Offset must be non-negative");
     }
 
-    // Use search with empty query to get all data centers
-    SearchQuery query = new SearchQuery("", limit, offset);
-    SearchResult result = searchService.search(query);
+    // Return all data centers with pagination (no search query)
+    SearchResult result = searchService.getAllDataCenters(limit, offset);
 
     Map<String, Object> response = new HashMap<>();
     response.put("dataCenters", result.getResults());

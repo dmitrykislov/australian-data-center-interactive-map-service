@@ -4,15 +4,14 @@ FROM maven:3.9.6-eclipse-temurin-21 AS builder
 
 WORKDIR /build
 
-# Copy pom.xml and download dependencies
+# Copy build files first for better layer caching
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
+COPY checkstyle.xml .
 
 # Copy source code
 COPY src ./src
-COPY checkstyle.xml .
 
-# Build application
+# Build application directly (go-offline fails because of a non-resolvable Gatling plugin version)
 RUN mvn clean package -DskipTests -B
 
 # Stage 2: Runtime

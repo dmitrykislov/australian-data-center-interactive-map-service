@@ -26,10 +26,14 @@ const ATTRIBUTION_DATA = {
 };
 
 /**
- * Initialize attribution data
+ * Initialize attribution data and optionally add control to a Leaflet map
+ * @param {L.Map} [map] - Optional Leaflet map instance to add the attribution control to
  * @returns {Object} Attribution data with tile providers and data sources
  */
-export function initializeAttribution() {
+export function initializeAttribution(map) {
+  if (map) {
+    addAttributionControl(map);
+  }
   return {
     tileProviders: ATTRIBUTION_DATA.tileProviders,
     dataSources: ATTRIBUTION_DATA.dataSources,
@@ -124,4 +128,15 @@ export function displayAttributionModal(containerId) {
   `;
 
   container.innerHTML = html;
+}
+
+/**
+ * Validate that all required attribution sources are present
+ * @returns {boolean} True if all required attributions are present
+ */
+export function validateAttributions() {
+  return (
+    ATTRIBUTION_DATA.tileProviders.length > 0 &&
+    ATTRIBUTION_DATA.dataSources.length > 0
+  );
 }

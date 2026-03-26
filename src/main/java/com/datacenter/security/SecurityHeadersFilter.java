@@ -22,11 +22,11 @@ public class SecurityHeadersFilter implements Filter {
   private static final String CSP_HEADER = "Content-Security-Policy";
   private static final String CSP_VALUE =
       "default-src 'self'; "
-          + "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; "
-          + "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; "
+          + "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; "
+          + "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; "
           + "img-src 'self' data: https:; "
-          + "font-src 'self' https://cdn.jsdelivr.net https://unpkg.com; "
-          + "connect-src 'self' https://tile.openstreetmap.org https://tiles.stadiamaps.com; "
+          + "font-src 'self' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; "
+          + "connect-src 'self' ws: wss: https://tile.openstreetmap.org https://tiles.stadiamaps.com; "
           + "frame-ancestors 'none'; "
           + "base-uri 'self'; "
           + "form-action 'self'";

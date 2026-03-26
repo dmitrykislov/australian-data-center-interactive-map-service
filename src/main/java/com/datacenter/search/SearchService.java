@@ -79,6 +79,25 @@ public class SearchService {
   }
 
   /**
+   * Returns all data centers with pagination, bypassing the search algorithm.
+   * Used by the "list all" endpoint where no query term is provided.
+   *
+   * @param limit maximum number of results to return
+   * @param offset number of results to skip
+   * @return paginated slice of all data centers together with total count metadata
+   */
+  public SearchResult getAllDataCenters(int limit, int offset) {
+    long startTime = System.currentTimeMillis();
+
+    List<DataCenter> page =
+        dataCenters.stream().skip(offset).limit(limit).toList();
+
+    long executionTimeMs = System.currentTimeMillis() - startTime;
+
+    return new SearchResult(page, dataCenters.size(), limit, offset, executionTimeMs);
+  }
+
+  /**
    * Gets autocomplete suggestions for the given query.
    * Results are cached in Redis with 1-hour TTL.
    *

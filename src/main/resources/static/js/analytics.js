@@ -3,7 +3,7 @@
  * Tracks anonymous page views and events without collecting PII
  */
 
-const ANALYTICS_ENDPOINT = '/api/analytics';
+const ANALYTICS_BASE = '/api/v1/analytics';
 const SESSION_ID_KEY = 'analyticsSessionId';
 
 /**
@@ -108,14 +108,24 @@ export async function trackEvent(eventType, metadata = {}) {
  */
 async function sendAnalyticsEvent(event) {
   try {
-    const response = await fetch(ANALYTICS_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(event),
-    });
+    let url;
+    const params = new URLSearchParams();
 
+    if (event.eventType === 'page_view') {
+      url = `${ANALYTICS_BASE}/page-view`;
+      params.set('pagePath', event.pageUrl || '/');
+      if (event.referrer) params.set('referrer', event.referrer);
+      params.set('userAgentType', /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop');
+    } else if (event.eventType === 'api_call') {
+      url = `${ANALYTICS_BASE}/api-call`;
+      params.set('endpoint', event.apiUrl || '/');
+      params.set('statusCode', String(event.httpStatus || 200));
+    } else {
+      // No backend endpoint for other event types – skip silently
+      return;
+    }
+
+    const response = await fetch(`${url}?${params.toString()}`, { method: 'POST' });
     if (!response.ok) {
       console.warn('Analytics event failed:', response.status);
     }
@@ -151,4 +161,14 @@ export async function trackSearchPerformed(searchTerm) {
  */
 export async function trackFacilityViewed(facilityId) {
   await trackEvent('facility_viewed', { facilityId });
+}
+
+/**
+ * Track an API call with its URL and HTTP status code
+ * @param {string} url - API endpoint URL
+ * @param {number} status - HTTP status code of the response
+ * @returns {Promise<void>}
+ */
+export async function trackApiCall(url, status) {
+  await trackEvent('api_call', { apiUrl: url, httpStatus: status });
 }
