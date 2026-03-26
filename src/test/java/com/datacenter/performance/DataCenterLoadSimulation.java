@@ -165,6 +165,8 @@ public class DataCenterLoadSimulation extends Simulation {
         .assertions(
             // Global assertions for all requests
             global().successfulRequests().percent().is(100.0),
+            // Throughput assertion: verify minimum throughput under load
+            global().successfulRequests().count().gte(5000L),
             // SLA response time assertions (acceptance criteria)
             global().responseTime().percentile(99.0).lt(200),
             global().responseTime().percentile(95.0).lt(150),
