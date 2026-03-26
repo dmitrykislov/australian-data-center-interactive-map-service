@@ -1,0 +1,240 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.map-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.popup-hidden {
+    display: none;
+}
+
+.popup-visible {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: popupSlideIn 0.3s ease-out;
+}
+
+@keyframes popupSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.popup-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.popup-close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.popup-close-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.popup-section {
+    margin-bottom: 20px;
+}
+
+.popup-section:last-child {
+    margin-bottom: 0;
+}
+
+.popup-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.popup-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.popup-field:last-child {
+    border-bottom: none;
+}
+
+.popup-field-label {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+.popup-field-value {
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 500;
+    text-align: right;
+    max-width: 60%;
+    word-break: break-word;
+}
+
+.popup-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.popup-status.operational {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.popup-status.maintenance {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.popup-status.planned {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.popup-status.decommissioned {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.popup-specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.popup-spec-item {
+    background-color: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.popup-spec-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.popup-spec-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.popup-no-data {
+    color: #999;
+    font-style: italic;
+    font-size: 13px;
+}
+
+/* Leaflet marker customization */
+.leaflet-marker-icon.operational {
+    filter: hue-rotate(120deg) brightness(1.1);
+}
+
+.leaflet-marker-icon.planned {
+    filter: hue-rotate(200deg) brightness(1.1);
+}
+
+.leaflet-marker-icon.maintenance {
+    filter: hue-rotate(40deg) brightness(1.1);
+}
+
+.leaflet-marker-icon.decommissioned {
+    filter: grayscale(100%) brightness(0.8);
+}
+
+/* Performance monitoring */
+.perf-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 500;
+    display: none;
+}
+
+.perf-indicator.visible {
+    display: block;
+}

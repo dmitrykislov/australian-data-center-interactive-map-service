@@ -1,30 +1,31 @@
-# Build output
-target/
-build/
-dist/
-
-# Dependencies
+# Node.js
 node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Playwright
+test-results/
+playwright-report/
+.auth/
 
 # IDE
-.idea/
-*.iml
 .vscode/
-.settings/
-.project
-.classpath
+.idea/
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Java
-*.class
-*.jar
-*.war
+# Build
+dist/
+build/
+target/
 
-# Logs
-*.log
-
-# Worker worktrees (per-task isolation)
-.worktrees/
+# Environment
+.env
+.env.local
