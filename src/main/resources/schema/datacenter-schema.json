@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "DataCenter Schema",
-  "description": "JSON schema for validating data center entities",
+  "description": "JSON schema for validating data center entities with metadata",
   "type": "object",
   "required": [
     "id",
@@ -82,6 +82,84 @@
       ],
       "description": "Optional comma-separated tags for categorization",
       "maxLength": 500
+    },
+    "confirmationStatus": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Confirmation status of the data center (confirmed or unconfirmed). Optional field that defaults to 'confirmed' if not provided.",
+      "enum": [
+        "confirmed",
+        "unconfirmed",
+        null
+      ]
+    },
+    "metadata": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Structured metadata including source references, verification dates, and location details",
+      "properties": {
+        "sourceReference": {
+          "type": "string",
+          "description": "Source reference for the data center information",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "confirmationStatus": {
+          "type": "string",
+          "description": "Confirmation status from metadata (confirmed or unconfirmed)",
+          "enum": [
+            "confirmed",
+            "unconfirmed"
+          ]
+        },
+        "sourceUrl": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "URL to the source of the data center information",
+          "format": "uri"
+        },
+        "lastVerifiedDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Date when the data center information was last verified (YYYY-MM-DD format)",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "region": {
+          "type": "string",
+          "description": "Australian state or territory",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "city": {
+          "type": "string",
+          "description": "City where the data center is located",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "comments": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Additional comments about the data center",
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "sourceReference",
+        "confirmationStatus",
+        "region",
+        "city"
+      ],
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

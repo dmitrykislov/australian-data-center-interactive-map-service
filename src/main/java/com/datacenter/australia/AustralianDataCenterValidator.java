@@ -1,5 +1,6 @@
 package com.datacenter.australia;
 
+import com.datacenter.australia.DataCenterMetadata;
 import com.datacenter.model.Coordinates;
 import com.datacenter.model.DataCenter;
 import com.datacenter.model.DataCenterStatus;
@@ -181,7 +182,26 @@ public class AustralianDataCenterValidator {
       tags = dataCenterJson.get("tags").asText();
     }
 
-    return new DataCenter(id, name, operator, coordinates, capacity, status, description, tags);
+    String confirmationStatus = null;
+    if (dataCenterJson.has("confirmationStatus") && !dataCenterJson.get("confirmationStatus").isNull()) {
+      confirmationStatus = dataCenterJson.get("confirmationStatus").asText();
+    }
+
+    DataCenterMetadata metadata = null;
+    if (dataCenterJson.has("metadata") && !dataCenterJson.get("metadata").isNull()) {
+      JsonNode metadataNode = dataCenterJson.get("metadata");
+      String sourceReference = metadataNode.has("sourceReference") ? metadataNode.get("sourceReference").asText() : null;
+      String sourceUrl = metadataNode.has("sourceUrl") ? metadataNode.get("sourceUrl").asText() : null;
+      String lastVerifiedDate = metadataNode.has("lastVerifiedDate") ? metadataNode.get("lastVerifiedDate").asText() : null;
+      String region = metadataNode.has("region") ? metadataNode.get("region").asText() : null;
+      String city = metadataNode.has("city") ? metadataNode.get("city").asText() : null;
+      String comments = metadataNode.has("comments") ? metadataNode.get("comments").asText() : null;
+      
+      if (sourceReference != null && region != null && city != null) {
+        metadata = new DataCenterMetadata(sourceReference, confirmationStatus, sourceUrl, lastVerifiedDate, region, city, comments);
+      }
+    }
+    return new DataCenter(id, name, operator, coordinates, capacity, status, description, tags, confirmationStatus, metadata);
   }
 
   /**

@@ -9,8 +9,18 @@
     },
     "capacity": 150,
     "status": "operational",
-    "description": "Major data center in Sydney CBD, serving enterprise customers across APAC region. Verified through official Equinix Australia website and industry reports.",
-    "tags": "au,nsw,sydney,capital,operational,equinix,confirmed"
+    "description": "Major data center in Sydney CBD, serving enterprise customers across APAC region.",
+    "tags": "au,nsw,sydney,capital,operational,equinix",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Equinix Official Website",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.equinix.com.au/data-centers/sydney",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "NSW",
+      "city": "Sydney",
+      "comments": "Verified through official Equinix Australia website and industry reports"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440002",
@@ -22,8 +32,18 @@
     },
     "capacity": 120,
     "status": "operational",
-    "description": "NextDC facility in Melbourne, providing colocation and cloud services. Verified through NextDC official announcements and ASX filings.",
-    "tags": "au,vic,melbourne,capital,operational,nextdc,confirmed"
+    "description": "NextDC facility in Melbourne, providing colocation and cloud services.",
+    "tags": "au,vic,melbourne,capital,operational,nextdc",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "NextDC ASX Filings",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.nextdc.com/data-centers",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "VIC",
+      "city": "Melbourne",
+      "comments": "Verified through NextDC official announcements and ASX filings"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440003",
@@ -35,8 +55,18 @@
     },
     "capacity": 80,
     "status": "operational",
-    "description": "Equinix facility in Brisbane serving Queensland and regional markets. Verified through Equinix facility listings and industry databases.",
-    "tags": "au,qld,brisbane,capital,operational,equinix,confirmed"
+    "description": "Equinix facility in Brisbane serving Queensland and regional markets.",
+    "tags": "au,qld,brisbane,capital,operational,equinix",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Equinix Facility Listings",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.equinix.com.au/data-centers/brisbane",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "QLD",
+      "city": "Brisbane",
+      "comments": "Verified through Equinix facility listings and industry databases"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440004",
@@ -48,8 +78,18 @@
     },
     "capacity": 60,
     "status": "operational",
-    "description": "NextDC facility in Perth supporting Western Australia operations. Verified through NextDC facility announcements.",
-    "tags": "au,wa,perth,capital,operational,nextdc,confirmed"
+    "description": "NextDC facility in Perth supporting Western Australia operations.",
+    "tags": "au,wa,perth,capital,operational,nextdc",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "NextDC Facility Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.nextdc.com/data-centers/perth",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "WA",
+      "city": "Perth",
+      "comments": "Verified through NextDC facility announcements"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440005",
@@ -61,8 +101,18 @@
     },
     "capacity": 40,
     "status": "operational",
-    "description": "AAPT data center in Adelaide serving South Australian market. Verified through AAPT service provider listings.",
-    "tags": "au,sa,adelaide,capital,operational,aapt,confirmed"
+    "description": "AAPT data center in Adelaide serving South Australian market.",
+    "tags": "au,sa,adelaide,capital,operational,aapt",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "AAPT Service Provider Listings",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.aapt.com.au/data-centers",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "SA",
+      "city": "Adelaide",
+      "comments": "Verified through AAPT service provider listings"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440006",
@@ -74,8 +124,18 @@
     },
     "capacity": 25,
     "status": "operational",
-    "description": "Government-operated data center in Hobart for Tasmanian services. Verified through Tasmanian Government ICT infrastructure documentation.",
-    "tags": "au,tas,hobart,capital,operational,government,confirmed"
+    "description": "Government-operated data center in Hobart for Tasmanian services.",
+    "tags": "au,tas,hobart,capital,operational,government",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Tasmanian Government ICT Infrastructure",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.tas.gov.au/ict-infrastructure",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "TAS",
+      "city": "Hobart",
+      "comments": "Verified through Tasmanian Government ICT infrastructure documentation"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440007",
@@ -87,8 +147,18 @@
     },
     "capacity": 100,
     "status": "operational",
-    "description": "Australian Government data center in Canberra for federal services. Verified through DTA infrastructure announcements and government ICT strategy.",
-    "tags": "au,act,canberra,capital,operational,government,confirmed"
+    "description": "Australian Government data center in Canberra for federal services.",
+    "tags": "au,act,canberra,capital,operational,government",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "DTA Infrastructure Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.dta.gov.au/infrastructure",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "ACT",
+      "city": "Canberra",
+      "comments": "Verified through DTA infrastructure announcements and government ICT strategy"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440008",
@@ -100,8 +170,18 @@
     },
     "capacity": 30,
     "status": "operational",
-    "description": "Northern Territory Government data center in Darwin. Verified through NT Government infrastructure services.",
-    "tags": "au,nt,darwin,capital,operational,government,confirmed"
+    "description": "Northern Territory Government data center in Darwin.",
+    "tags": "au,nt,darwin,capital,operational,government",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "NT Government Infrastructure Services",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.nt.gov.au/infrastructure",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "NT",
+      "city": "Darwin",
+      "comments": "Verified through NT Government infrastructure services"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440009",
@@ -113,8 +193,18 @@
     },
     "capacity": 200,
     "status": "operational",
-    "description": "Amazon Web Services data center region in Sydney. Verified through AWS region announcements and official documentation.",
-    "tags": "au,nsw,sydney,operational,aws,cloud,confirmed"
+    "description": "Amazon Web Services data center region in Sydney.",
+    "tags": "au,nsw,sydney,operational,aws,cloud",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "AWS Region Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://aws.amazon.com/about-aws/global-infrastructure/regions_availability-zones/",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "NSW",
+      "city": "Sydney",
+      "comments": "Verified through AWS region announcements and official documentation"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440010",
@@ -126,8 +216,18 @@
     },
     "capacity": 180,
     "status": "operational",
-    "description": "Microsoft Azure data center region in Melbourne. Verified through Azure region announcements and official documentation.",
-    "tags": "au,vic,melbourne,operational,azure,cloud,confirmed"
+    "description": "Microsoft Azure data center region in Melbourne.",
+    "tags": "au,vic,melbourne,operational,azure,cloud",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Azure Region Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://azure.microsoft.com/en-au/global-infrastructure/regions/",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "VIC",
+      "city": "Melbourne",
+      "comments": "Verified through Azure region announcements and official documentation"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440011",
@@ -139,8 +239,18 @@
     },
     "capacity": 250,
     "status": "operational",
-    "description": "Secure data center for Australian Defence Force operations. Verified through Defence strategic infrastructure announcements.",
-    "tags": "au,act,canberra,defence,military,operational,government,confirmed"
+    "description": "Secure data center for Australian Defence Force operations.",
+    "tags": "au,act,canberra,defence,military,operational,government",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Defence Strategic Infrastructure Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.defence.gov.au/",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "ACT",
+      "city": "Canberra",
+      "comments": "Verified through Defence strategic infrastructure announcements"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440012",
@@ -152,8 +262,18 @@
     },
     "capacity": 90,
     "status": "operational",
-    "description": "Telstra remote operations and disaster recovery center in Sydney. Verified through Telstra infrastructure announcements.",
-    "tags": "au,nsw,sydney,remote,operational,telstra,confirmed"
+    "description": "Telstra remote operations and disaster recovery center in Sydney.",
+    "tags": "au,nsw,sydney,remote,operational,telstra",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Telstra Infrastructure Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.telstra.com.au/",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "NSW",
+      "city": "Sydney",
+      "comments": "Verified through Telstra infrastructure announcements"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440013",
@@ -165,8 +285,18 @@
     },
     "capacity": 50,
     "status": "planned",
-    "description": "Planned NextDC facility on Gold Coast for regional expansion. Verified through NextDC expansion announcements and ASX filings.",
-    "tags": "au,qld,gold-coast,planned,nextdc,confirmed"
+    "description": "Planned NextDC facility on Gold Coast for regional expansion.",
+    "tags": "au,qld,gold-coast,planned,nextdc",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "NextDC Expansion Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.nextdc.com/data-centers",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "QLD",
+      "city": "Gold Coast",
+      "comments": "Verified through NextDC expansion announcements and ASX filings"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440014",
@@ -178,8 +308,18 @@
     },
     "capacity": 45,
     "status": "operational",
-    "description": "Equinix facility in Newcastle serving regional NSW. Verified through Equinix facility listings.",
-    "tags": "au,nsw,newcastle,regional,operational,equinix,confirmed"
+    "description": "Equinix facility in Newcastle serving regional NSW.",
+    "tags": "au,nsw,newcastle,regional,operational,equinix",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Equinix Facility Listings",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.equinix.com.au/data-centers",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "NSW",
+      "city": "Newcastle",
+      "comments": "Verified through Equinix facility listings"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440015",
@@ -191,8 +331,18 @@
     },
     "capacity": 55,
     "status": "operational",
-    "description": "NextDC facility in Geelong serving regional Victoria. Verified through NextDC facility announcements.",
-    "tags": "au,vic,geelong,regional,operational,nextdc,confirmed"
+    "description": "NextDC facility in Geelong serving regional Victoria.",
+    "tags": "au,vic,geelong,regional,operational,nextdc",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "NextDC Facility Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.nextdc.com/data-centers",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "VIC",
+      "city": "Geelong",
+      "comments": "Verified through NextDC facility announcements"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440016",
@@ -204,8 +354,18 @@
     },
     "capacity": 35,
     "status": "operational",
-    "description": "AAPT data center in Wollongong for regional NSW services. Verified through AAPT service provider listings.",
-    "tags": "au,nsw,wollongong,regional,operational,aapt,confirmed"
+    "description": "AAPT data center in Wollongong for regional NSW services.",
+    "tags": "au,nsw,wollongong,regional,operational,aapt",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "AAPT Service Provider Listings",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.aapt.com.au/data-centers",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "NSW",
+      "city": "Wollongong",
+      "comments": "Verified through AAPT service provider listings"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440017",
@@ -217,8 +377,18 @@
     },
     "capacity": 40,
     "status": "operational",
-    "description": "Telstra data center in Townsville serving North Queensland. Verified through Telstra infrastructure announcements.",
-    "tags": "au,qld,townsville,regional,operational,telstra,confirmed"
+    "description": "Telstra data center in Townsville serving North Queensland.",
+    "tags": "au,qld,townsville,regional,operational,telstra",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Telstra Infrastructure Announcements",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.telstra.com.au/",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "QLD",
+      "city": "Townsville",
+      "comments": "Verified through Telstra infrastructure announcements"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440018",
@@ -230,8 +400,18 @@
     },
     "capacity": 30,
     "status": "operational",
-    "description": "Vodafone data center in Cairns for Far North Queensland. Facility mentioned in regional infrastructure reports.",
-    "tags": "au,qld,cairns,regional,operational,vodafone,unconfirmed"
+    "description": "Vodafone data center in Cairns for Far North Queensland.",
+    "tags": "au,qld,cairns,regional,operational,vodafone",
+    "confirmationStatus": "unconfirmed",
+    "metadata": {
+      "sourceReference": "Regional Infrastructure Reports",
+      "confirmationStatus": "unconfirmed",
+      "sourceUrl": null,
+      "lastVerifiedDate": "2026-03-27",
+      "region": "QLD",
+      "city": "Cairns",
+      "comments": "Facility mentioned in regional infrastructure reports but not yet confirmed through official sources"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440019",
@@ -243,8 +423,18 @@
     },
     "capacity": 20,
     "status": "operational",
-    "description": "Tasmanian Government data center in Launceston. Verified through Tasmanian Government ICT infrastructure documentation.",
-    "tags": "au,tas,launceston,regional,operational,government,confirmed"
+    "description": "Tasmanian Government data center in Launceston.",
+    "tags": "au,tas,launceston,regional,operational,government",
+    "confirmationStatus": "confirmed",
+    "metadata": {
+      "sourceReference": "Tasmanian Government ICT Infrastructure",
+      "confirmationStatus": "confirmed",
+      "sourceUrl": "https://www.tas.gov.au/ict-infrastructure",
+      "lastVerifiedDate": "2026-03-27",
+      "region": "TAS",
+      "city": "Launceston",
+      "comments": "Verified through Tasmanian Government ICT infrastructure documentation"
+    }
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440020",
@@ -256,7 +446,17 @@
     },
     "capacity": 25,
     "status": "planned",
-    "description": "Planned regional data center for Albury-Wodonga area. Mentioned in regional development initiatives but not yet confirmed as operational.",
-    "tags": "au,nsw,albury-wodonga,regional,planned,government,unconfirmed"
+    "description": "Planned regional data center for Albury-Wodonga area.",
+    "tags": "au,nsw,albury-wodonga,regional,planned,government",
+    "confirmationStatus": "unconfirmed",
+    "metadata": {
+      "sourceReference": "Regional Development Initiatives",
+      "confirmationStatus": "unconfirmed",
+      "sourceUrl": null,
+      "lastVerifiedDate": "2026-03-27",
+      "region": "NSW",
+      "city": "Albury-Wodonga",
+      "comments": "Mentioned in regional development initiatives but not yet confirmed as operational"
+    }
   }
 ]

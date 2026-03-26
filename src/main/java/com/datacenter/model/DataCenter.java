@@ -1,5 +1,6 @@
 package com.datacenter.model;
 
+import com.datacenter.australia.DataCenterMetadata;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.UUID;
  * Represents a data center facility with location, specifications, operator, and status.
  * This is the core domain model for the data center mapping system.
  *
- * <p>Required fields: id, name, operator, coordinates, capacity, status
+ * <p>Required fields: id, name, operator, coordinates, capacity, status, confirmationStatus
  * Optional fields: description, tags
  */
 public class DataCenter {
@@ -22,6 +23,8 @@ public class DataCenter {
   private final DataCenterStatus status;
   private final String description;
   private final String tags;
+  private final String confirmationStatus;
+  private final DataCenterMetadata metadata;
 
   @JsonCreator
   public DataCenter(
@@ -32,7 +35,9 @@ public class DataCenter {
       @JsonProperty("capacity") long capacity,
       @JsonProperty("status") DataCenterStatus status,
       @JsonProperty("description") String description,
-      @JsonProperty("tags") String tags) {
+      @JsonProperty("tags") String tags,
+      @JsonProperty("confirmationStatus") String confirmationStatus,
+      @JsonProperty("metadata") DataCenterMetadata metadata) {
     this.id = validateId(id);
     this.name = validateName(name);
     this.operator = validateOperator(operator);
@@ -41,6 +46,8 @@ public class DataCenter {
     this.status = validateStatus(status);
     this.description = description;
     this.tags = tags;
+    this.confirmationStatus = validateConfirmationStatus(confirmationStatus);
+    this.metadata = metadata;
   }
 
   /**
@@ -53,7 +60,23 @@ public class DataCenter {
       Coordinates coordinates,
       long capacity,
       DataCenterStatus status) {
-    this(id, name, operator, coordinates, capacity, status, null, null);
+    this(id, name, operator, coordinates, capacity, status, null, null, null, null);
+  }
+
+  /**
+   * Creates a DataCenter with description and tags. Confirmation status defaults to 'confirmed'.
+   * This constructor is provided for backward compatibility with existing code.
+   */
+  public DataCenter(
+      String id,
+      String name,
+      String operator,
+      Coordinates coordinates,
+      long capacity,
+      DataCenterStatus status,
+      String description,
+      String tags) {
+    this(id, name, operator, coordinates, capacity, status, description, tags, "confirmed", null);
   }
 
   private static String validateId(String id) {
@@ -115,6 +138,22 @@ public class DataCenter {
     return status;
   }
 
+  private static String validateConfirmationStatus(String confirmationStatus) {
+    // Default to 'confirmed' if null (for backward compatibility)
+    if (confirmationStatus == null) {
+      return "confirmed";
+    }
+    if (confirmationStatus.trim().isEmpty()) {
+      throw new IllegalArgumentException("Confirmation status cannot be empty");
+    }
+    String normalized = confirmationStatus.toLowerCase();
+    if (!normalized.equals("confirmed") && !normalized.equals("unconfirmed")) {
+      throw new IllegalArgumentException(
+          "Confirmation status must be 'confirmed' or 'unconfirmed', got: " + confirmationStatus);
+    }
+    return normalized;
+  }
+
   @JsonProperty("id")
   public String getId() {
     return id;
@@ -155,6 +194,16 @@ public class DataCenter {
     return tags;
   }
 
+  @JsonProperty("confirmationStatus")
+  public String getConfirmationStatus() {
+    return confirmationStatus;
+  }
+
+  @JsonProperty("metadata")
+  public DataCenterMetadata getMetadata() {
+    return metadata;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -167,18 +216,20 @@ public class DataCenter {
         && Objects.equals(coordinates, that.coordinates)
         && status == that.status
         && Objects.equals(description, that.description)
-        && Objects.equals(tags, that.tags);
+        && Objects.equals(tags, that.tags)
+        && Objects.equals(confirmationStatus, that.confirmationStatus)
+        && Objects.equals(metadata, that.metadata);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, operator, coordinates, capacity, status, description, tags);
+    return Objects.hash(id, name, operator, coordinates, capacity, status, description, tags, confirmationStatus, metadata);
   }
 
   @Override
   public String toString() {
     return String.format(
-        "DataCenter{id='%s', name='%s', operator='%s', coordinates=%s, capacity=%d, status=%s}",
-        id, name, operator, coordinates, capacity, status);
+        "DataCenter{id='%s', name='%s', operator='%s', coordinates=%s, capacity=%d, status=%s, confirmationStatus='%s', metadata=%s}",
+        id, name, operator, coordinates, capacity, status, confirmationStatus, metadata);
   }
 }
