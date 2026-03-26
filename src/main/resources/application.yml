@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: datacenter-mapping
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 2000
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    root: INFO
+    com.datacenter: DEBUG
