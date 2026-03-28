@@ -71,8 +71,8 @@ html, body {
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     z-index: 2001;
-    width: min(92vw, 460px);
-    max-width: 460px;
+    width: min(94vw, 500px);
+    max-width: 500px;
     max-height: 85vh;
     overflow-y: auto;
     animation: popupSlideIn 0.3s ease-out;

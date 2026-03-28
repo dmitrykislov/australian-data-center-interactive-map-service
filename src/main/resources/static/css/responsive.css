@@ -15,8 +15,8 @@ html, body {
 }
 
 .popup-visible {
-    width: min(92vw, 460px);
-    max-width: 460px;
+    width: min(94vw, 500px);
+    max-width: 500px;
     max-height: 85vh;
     max-height: 85dvh;
 }
@@ -69,8 +69,8 @@ html, body {
 /* Tablet styles (600px and up) */
 @media (min-width: 600px) {
     .popup-visible {
-        width: min(90vw, 480px);
-        max-width: 480px;
+        width: min(92vw, 520px);
+        max-width: 520px;
     }
 
     .popup-header {
@@ -106,8 +106,8 @@ html, body {
     }
 
     .popup-visible {
-        width: min(86vw, 500px);
-        max-width: 500px;
+        width: min(88vw, 540px);
+        max-width: 540px;
     }
 
     .popup-title {
@@ -127,8 +127,8 @@ html, body {
 /* Desktop styles (1024px and up) */
 @media (min-width: 1024px) {
     .popup-visible {
-        width: min(82vw, 520px);
-        max-width: 520px;
+        width: min(84vw, 560px);
+        max-width: 560px;
     }
 
     .popup-title {
@@ -168,8 +168,8 @@ html, body {
 /* Large desktop styles (1280px and up) */
 @media (min-width: 1280px) {
     .popup-visible {
-        width: min(75vw, 540px);
-        max-width: 540px;
+        width: min(78vw, 580px);
+        max-width: 580px;
     }
 
     .popup-title {
@@ -180,8 +180,8 @@ html, body {
 /* Extra large desktop styles (1920px and up) */
 @media (min-width: 1920px) {
     .popup-visible {
-        width: min(62vw, 560px);
-        max-width: 560px;
+        width: min(65vw, 600px);
+        max-width: 600px;
     }
 
     .popup-title {
@@ -204,8 +204,8 @@ html, body {
 /* Ultra-wide desktop styles (2560px and up) */
 @media (min-width: 2560px) {
     .popup-visible {
-        width: min(52vw, 580px);
-        max-width: 580px;
+        width: min(55vw, 620px);
+        max-width: 620px;
     }
 
     .popup-title {

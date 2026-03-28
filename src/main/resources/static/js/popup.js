@@ -30,10 +30,14 @@ export function generatePopupContent(facility) {
     const capacity = formatCapacity(facility.capacity);
     const description = facility.description || 'N/A';
     const coordinates = formatCoordinates(facility.coordinates);
+    const coordinatesLink = buildGoogleMapsUrl(facility.coordinates);
     const confirmationStatus = formatConfirmationStatus(
         facility.confirmationStatus || metadata.confirmationStatus
     );
     const sourceUrl = sanitizeUrl(metadata.sourceUrl);
+    const capacityHelpText = 'Capacity is the total IT power load the site is designed to support, measured in megawatts (MW). For a rough sense of scale: 1 MW equals 1,000 kilowatts, around 5–10 MW is a modest data center, around 20 MW is large, and 50 MW or more is typically hyperscale-scale.';
+    const confirmationHelpText = 'Shows whether this data center record has been officially confirmed or is still based on secondary research.';
+    const lastVerifiedHelpText = 'The date when this record was last checked against the source to confirm it still looks accurate.';
 
     let html = `
         <div class="popup-header">
@@ -43,22 +47,22 @@ export function generatePopupContent(facility) {
         <div class="popup-content">
             <div class="popup-section">
                 <div class="popup-section-title">Facility Details</div>
-                ${buildFieldRow('Operator', facility.operator, 'Organization that owns or runs this data center.')}
-                ${buildFieldRow('Status', `<span class="popup-status ${statusClass}">${statusDisplay}</span>`, 'Current operational state of the facility.', true)}
-                ${buildFieldRow('Capacity', capacity, 'Total IT load capacity in megawatts (MW).')}
-                ${buildFieldRow('Description', description, 'Short summary of the facility and its purpose.')}
-                ${buildFieldRow('Confirmation', confirmationStatus, 'Shows whether this record has been officially confirmed.')}
-                ${buildFieldRow('Address', facility.address || 'N/A', 'Street address when available.')}
-                ${buildFieldRow('City', metadata.city || facility.city || 'N/A', 'Primary city where this facility is located.')}
-                ${buildFieldRow('Region', metadata.region || 'N/A', 'Australian state or territory for the facility.')}
-                ${buildFieldRow('Coordinates', coordinates, 'Latitude and longitude used to place the marker on the map.')}
+                ${buildFieldRow('Operator', facility.operator)}
+                ${buildFieldRow('Status', `<span class="popup-status ${statusClass}">${statusDisplay}</span>`, undefined, true)}
+                ${buildFieldRow('Capacity', capacity, capacityHelpText)}
+                ${buildFieldRow('Description', description)}
+                ${buildFieldRow('Confirmation', confirmationStatus, confirmationHelpText)}
+                ${buildFieldRow('Address', facility.address || 'N/A')}
+                ${buildFieldRow('City', metadata.city || facility.city || 'N/A')}
+                ${buildFieldRow('Region', metadata.region || 'N/A')}
+                ${buildFieldRow('Coordinates', renderCoordinatesValue(coordinates, coordinatesLink), undefined, true)}
             </div>
             <div class="popup-section">
                 <div class="popup-section-title">Data Provenance</div>
-                ${buildFieldRow('Source Reference', metadata.sourceReference || 'N/A', 'Human-readable source name used to verify the data.')}
-                ${buildFieldRow('Source URL', sourceUrl ? `<a class="popup-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(sourceUrl)}</a>` : 'N/A', 'Original source link used for verification.', true)}
-                ${buildFieldRow('Last Verified', metadata.lastVerifiedDate || 'N/A', 'Date when this record was last checked for accuracy.')}
-                ${buildFieldRow('Comments', metadata.comments || 'N/A', 'Additional verification notes and context for this record.')}
+                ${buildFieldRow('Source Reference', metadata.sourceReference || 'N/A')}
+                ${buildFieldRow('Source URL', sourceUrl ? `<a class="popup-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(sourceUrl)}</a>` : 'N/A', undefined, true)}
+                ${buildFieldRow('Last Verified', metadata.lastVerifiedDate || 'N/A', lastVerifiedHelpText)}
+                ${buildFieldRow('Comments', metadata.comments || 'N/A')}
             </div>
     `;
     
@@ -271,6 +275,14 @@ function formatCoordinates(coordinates) {
     return `${coordinates.latitude.toFixed(4)}, ${coordinates.longitude.toFixed(4)}`;
 }
 
+function renderCoordinatesValue(formattedCoordinates, googleMapsUrl) {
+    if (!googleMapsUrl || formattedCoordinates === 'N/A') {
+        return escapeHtml(formattedCoordinates || 'N/A');
+    }
+
+    return `<a class="popup-link" href="${escapeHtml(googleMapsUrl)}" target="_blank" rel="noopener noreferrer" title="Open coordinates in Google Maps">${escapeHtml(formattedCoordinates)}</a>`;
+}
+
 function formatConfirmationStatus(status) {
     if (!status) {
         return 'N/A';
@@ -305,6 +317,21 @@ function sanitizeUrl(url) {
         return url;
     }
     return '';
+}
+
+function buildGoogleMapsUrl(coordinates) {
+    if (!coordinates || typeof coordinates.latitude !== 'number' || typeof coordinates.longitude !== 'number') {
+        return '';
+    }
+
+    const latitude = coordinates.latitude;
+    const longitude = coordinates.longitude;
+
+    if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+        return '';
+    }
+
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${latitude},${longitude}`)}`;
 }
 
 /**

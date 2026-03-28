@@ -68,23 +68,58 @@ describe('Popup Content Generation', () => {
             expect(html).toContain('https://example.com/datacenter');
             expect(html).toContain('2026-03-27');
             expect(html).toContain('-33.8688');
+            expect(html).toContain('https://www.google.com/maps/search/?api=1&amp;query=-33.8688%2C151.2093');
+            expect(html).toContain('title="Open coordinates in Google Maps"');
         });
 
-        it('should include info icons with field explanations', () => {
+        it('should render coordinates as a clickable Google Maps link when coordinates are valid', () => {
+            const facility = {
+                ...validFacility,
+                coordinates: { latitude: -37.8136, longitude: 144.9631 }
+            };
+
+            const html = generatePopupContent(facility);
+
+            expect(html).toContain('-37.8136, 144.9631');
+            expect(html).toContain('href="https://www.google.com/maps/search/?api=1&amp;query=-37.8136%2C144.9631"');
+            expect(html).toContain('target="_blank"');
+            expect(html).toContain('rel="noopener noreferrer"');
+        });
+
+        it('should render N/A instead of a link when coordinates are invalid', () => {
+            const facility = {
+                ...validFacility,
+                coordinates: { latitude: 'invalid', longitude: 144.9631 }
+            };
+
+            const html = generatePopupContent(facility);
+
+            expect(html).toContain('Coordinates');
+            expect(html).toContain('>N/A<');
+            expect(html).not.toContain('google.com/maps/search');
+        });
+
+        it('should include info icons only for Capacity, Confirmation, and Last Verified', () => {
             const html = generatePopupContent(validFacility);
             expect(html).toContain('class="info-icon-wrap"');
             expect(html).toContain('class="info-icon"');
-            // help text is stored in data-help; tooltip lives in <body> at runtime
-            expect(html).toContain('data-help=');
-            expect(html).toContain('Capacity');
-        });
-
-        it('info icon stores help text in data-help attribute', () => {
-            const html = generatePopupContent(validFacility);
-            // Every info icon button should carry the help text in data-help
             const dataHelpMatches = html.match(/data-help="[^"]+"/g);
             expect(dataHelpMatches).not.toBeNull();
-            expect(dataHelpMatches.length).toBeGreaterThan(0);
+            expect(dataHelpMatches).toHaveLength(3);
+            expect(html).toContain('Capacity');
+            expect(html).toContain('Confirmation');
+            expect(html).toContain('Last Verified');
+            expect(html).not.toContain('Organization that owns or runs this data center.');
+            expect(html).not.toContain('Current operational state of the facility.');
+            expect(html).not.toContain('Latitude and longitude used to place the marker on the map.');
+        });
+
+        it('capacity info icon should use plain-language size comparisons', () => {
+            const html = generatePopupContent(validFacility);
+            expect(html).toContain('1 MW equals 1,000 kilowatts');
+            expect(html).toContain('5–10 MW is a modest data center');
+            expect(html).toContain('20 MW is large');
+            expect(html).toContain('50 MW or more is typically hyperscale-scale');
         });
     });
 
