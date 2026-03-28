@@ -14,6 +14,10 @@ vi.mock('../../main/resources/static/js/marker-keyboard-navigation.js', () => ({
   initializeMarkerKeyboardNavigation: vi.fn(),
 }));
 
+vi.mock('../../main/resources/static/js/stats-overlay.js', () => ({
+  createStatsOverlay: vi.fn(),
+}));
+
 function setupLeafletMock(createdMarkers) {
   const mapContainer = document.getElementById('map');
   const mapInstance = {

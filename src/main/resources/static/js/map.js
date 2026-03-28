@@ -7,6 +7,7 @@ import { createPopup } from './popup.js';
 import { initializeMarkerKeyboardNavigation } from './marker-keyboard-navigation.js';
 import { initializeAttribution, validateAttributions } from './attribution.js';
 import { trackPageView, trackApiCall } from './analytics.js';
+import { createStatsOverlay } from './stats-overlay.js';
 
 const MAP_CONFIG = {
     center: [20, 0],
@@ -54,7 +55,10 @@ export async function initializeMap() {
         
         // Add markers to map
         addMarkersToMap();
-        
+
+        // Show stats overlay
+        createStatsOverlay(dataCenters);
+
         // Fit bounds if data centers exist
         if (dataCenters.length > 0) {
             fitMapBounds();
