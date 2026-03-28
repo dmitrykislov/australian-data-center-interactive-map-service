@@ -15,10 +15,10 @@ html, body {
 }
 
 .popup-visible {
-    width: 90%;
-    max-width: 500px;
-    max-height: 80vh;
-    max-height: 80dvh;
+    width: min(92vw, 460px);
+    max-width: 460px;
+    max-height: 85vh;
+    max-height: 85dvh;
 }
 
 .popup-header {
@@ -36,9 +36,7 @@ html, body {
 }
 
 .popup-field {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    padding: 10px 0;
 }
 
 .popup-field-label {
@@ -71,8 +69,8 @@ html, body {
 /* Tablet styles (600px and up) */
 @media (min-width: 600px) {
     .popup-visible {
-        width: 85%;
-        max-width: 550px;
+        width: min(90vw, 480px);
+        max-width: 480px;
     }
 
     .popup-header {
@@ -90,16 +88,10 @@ html, body {
         font-size: 14px;
     }
 
-    .popup-field {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-    }
 
     .popup-field-value {
-        text-align: right;
-        max-width: 60%;
+        text-align: left;
+        max-width: 100%;
     }
 
     .popup-specs-grid {
@@ -114,8 +106,8 @@ html, body {
     }
 
     .popup-visible {
-        width: 80%;
-        max-width: 600px;
+        width: min(86vw, 500px);
+        max-width: 500px;
     }
 
     .popup-title {
@@ -135,8 +127,8 @@ html, body {
 /* Desktop styles (1024px and up) */
 @media (min-width: 1024px) {
     .popup-visible {
-        width: 75%;
-        max-width: 650px;
+        width: min(82vw, 520px);
+        max-width: 520px;
     }
 
     .popup-title {
@@ -176,8 +168,8 @@ html, body {
 /* Large desktop styles (1280px and up) */
 @media (min-width: 1280px) {
     .popup-visible {
-        width: 70%;
-        max-width: 700px;
+        width: min(75vw, 540px);
+        max-width: 540px;
     }
 
     .popup-title {
@@ -188,8 +180,8 @@ html, body {
 /* Extra large desktop styles (1920px and up) */
 @media (min-width: 1920px) {
     .popup-visible {
-        width: 60%;
-        max-width: 800px;
+        width: min(62vw, 560px);
+        max-width: 560px;
     }
 
     .popup-title {
@@ -212,8 +204,8 @@ html, body {
 /* Ultra-wide desktop styles (2560px and up) */
 @media (min-width: 2560px) {
     .popup-visible {
-        width: 50%;
-        max-width: 900px;
+        width: min(52vw, 580px);
+        max-width: 580px;
     }
 
     .popup-title {

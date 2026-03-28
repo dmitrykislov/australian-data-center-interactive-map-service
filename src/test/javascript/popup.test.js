@@ -37,8 +37,180 @@ describe('Popup Content Generation', () => {
             expect(html).toContain('popup-header');
             expect(html).toContain('popup-content');
             expect(html).toContain('popup-close-btn');
+            expect(html).toContain('Data Provenance');
         });
-        
+
+        it('should display full data center details including metadata fields', () => {
+            const facility = {
+                ...validFacility,
+                capacity: 150,
+                description: 'Major facility serving enterprise customers.',
+                tags: 'au,nsw,sydney',
+                confirmationStatus: 'confirmed',
+                coordinates: { latitude: -33.8688, longitude: 151.2093 },
+                metadata: {
+                    sourceReference: 'Official Operator Documentation',
+                    sourceUrl: 'https://example.com/datacenter',
+                    lastVerifiedDate: '2026-03-27',
+                    region: 'NSW',
+                    city: 'Sydney',
+                    comments: 'Verified from official operator site.'
+                }
+            };
+
+            const html = generatePopupContent(facility);
+
+            expect(html).toContain('150 MW');
+            expect(html).toContain('Major facility serving enterprise customers.');
+            expect(html).toContain('NSW');
+            expect(html).toContain('Sydney');
+            expect(html).toContain('Official Operator Documentation');
+            expect(html).toContain('https://example.com/datacenter');
+            expect(html).toContain('2026-03-27');
+            expect(html).toContain('-33.8688');
+        });
+
+        it('should include info icons with field explanations', () => {
+            const html = generatePopupContent(validFacility);
+            expect(html).toContain('class="info-icon-wrap"');
+            expect(html).toContain('class="info-icon"');
+            // help text is stored in data-help; tooltip lives in <body> at runtime
+            expect(html).toContain('data-help=');
+            expect(html).toContain('Capacity');
+        });
+
+        it('info icon stores help text in data-help attribute', () => {
+            const html = generatePopupContent(validFacility);
+            // Every info icon button should carry the help text in data-help
+            const dataHelpMatches = html.match(/data-help="[^"]+"/g);
+            expect(dataHelpMatches).not.toBeNull();
+            expect(dataHelpMatches.length).toBeGreaterThan(0);
+        });
+    });
+
+    describe('Info icon tooltip behaviour (createPopup)', () => {
+        let container;
+
+        beforeEach(() => {
+            container = document.createElement('div');
+            container.id = 'popup-container';
+            container.className = 'popup-hidden';
+            document.body.appendChild(container);
+        });
+
+        afterEach(() => {
+            if (container && container.parentNode) {
+                container.parentNode.removeChild(container);
+            }
+        });
+
+        function firstInfoIconWrap(popup) {
+            return popup.element.querySelector('.info-icon-wrap');
+        }
+
+        it('tooltip is hidden by default', () => {
+            const popup = createPopup(validFacility, container);
+            const wrap = firstInfoIconWrap(popup);
+            expect(wrap.classList.contains('tooltip-open')).toBe(false);
+        });
+
+        it('clicking info icon adds tooltip-open class', () => {
+            const popup = createPopup(validFacility, container);
+            const wrap = firstInfoIconWrap(popup);
+            const icon = wrap.querySelector('.info-icon');
+
+            icon.click();
+
+            expect(wrap.classList.contains('tooltip-open')).toBe(true);
+        });
+
+        it('clicking info icon again removes tooltip-open class', () => {
+            const popup = createPopup(validFacility, container);
+            const wrap = firstInfoIconWrap(popup);
+            const icon = wrap.querySelector('.info-icon');
+
+            icon.click(); // open
+            icon.click(); // close
+
+            expect(wrap.classList.contains('tooltip-open')).toBe(false);
+        });
+
+        it('pressing Enter on focused icon opens tooltip', () => {
+            const popup = createPopup(validFacility, container);
+            const wrap = firstInfoIconWrap(popup);
+            const icon = wrap.querySelector('.info-icon');
+
+            icon.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+
+            expect(wrap.classList.contains('tooltip-open')).toBe(true);
+        });
+
+        it('pressing Space on focused icon opens tooltip', () => {
+            const popup = createPopup(validFacility, container);
+            const wrap = firstInfoIconWrap(popup);
+            const icon = wrap.querySelector('.info-icon');
+
+            icon.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+
+            expect(wrap.classList.contains('tooltip-open')).toBe(true);
+        });
+
+        it('pressing Escape dismisses open tooltip', () => {
+            const popup = createPopup(validFacility, container);
+            const wrap = firstInfoIconWrap(popup);
+            const icon = wrap.querySelector('.info-icon');
+
+            icon.click(); // open
+            icon.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+            expect(wrap.classList.contains('tooltip-open')).toBe(false);
+        });
+
+        it('clicking elsewhere inside popup closes tooltip', () => {
+            const popup = createPopup(validFacility, container);
+            const wrap = firstInfoIconWrap(popup);
+            const icon = wrap.querySelector('.info-icon');
+
+            icon.click(); // open
+            expect(wrap.classList.contains('tooltip-open')).toBe(true);
+
+            popup.element.querySelector('.popup-content').click();
+
+            expect(wrap.classList.contains('tooltip-open')).toBe(false);
+        });
+
+        it('opening a second tooltip closes the first', () => {
+            const popup = createPopup(validFacility, container);
+            const wraps = popup.element.querySelectorAll('.info-icon-wrap');
+            if (wraps.length < 2) return; // skip if only one icon
+
+            const icon0 = wraps[0].querySelector('.info-icon');
+            const icon1 = wraps[1].querySelector('.info-icon');
+
+            icon0.click(); // open first
+            icon1.click(); // open second — should close first
+
+            expect(wraps[0].classList.contains('tooltip-open')).toBe(false);
+            expect(wraps[1].classList.contains('tooltip-open')).toBe(true);
+        });
+
+        it('tooltip element is created in document.body and has role="tooltip"', () => {
+            const popup = createPopup(validFacility, container);
+            const icon = popup.element.querySelector('.info-icon');
+
+            // Click to trigger tooltip creation/show
+            icon.click();
+
+            const tooltip = document.getElementById('popup-info-tooltip');
+            expect(tooltip).not.toBeNull();
+            expect(tooltip.getAttribute('role')).toBe('tooltip');
+            expect(tooltip.style.display).toBe('block');
+            expect(tooltip.parentNode).toBe(document.body);
+
+            // cleanup
+            icon.click();
+        });
+
         it('should display status with correct CSS class', () => {
             const html = generatePopupContent(validFacility);
             
@@ -227,14 +399,14 @@ describe('Popup Content Generation', () => {
             
             expect(popup).toBeDefined();
             expect(popup.element).toBeDefined();
-            expect(container.querySelector('.popup-visible')).toBeTruthy();
+            expect(container.querySelector('.popup-dialog')).toBeTruthy();
         });
         
         it('should remove popup-hidden class from container', () => {
             createPopup(validFacility, container);
             
             expect(container.classList.contains('popup-hidden')).toBe(false);
-            expect(container.classList.contains('popup-visible')).toBe(true);
+            expect(container.classList.contains('popup-container-visible')).toBe(true);
         });
         
         it('should return popup object with close method', () => {
@@ -343,7 +515,7 @@ describe('Popup Content Generation', () => {
                 overlay.click();
                 
                 // Verify popup is closed
-                const popupElement = container.querySelector('.popup-visible');
+                const popupElement = container.querySelector('.popup-dialog');
                 expect(popupElement).toBeFalsy();
                 
                 resolve();
@@ -382,7 +554,7 @@ describe('Popup Content Generation', () => {
                 
                 // Verify popup3 is closed (its listener handled the Escape)
                 setTimeout(() => {
-                    const popupElement = container.querySelector('.popup-visible');
+                    const popupElement = container.querySelector('.popup-dialog');
                     expect(popupElement).toBeFalsy();
                     resolve();
                 }, 10);

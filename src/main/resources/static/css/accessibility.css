@@ -93,37 +93,38 @@ a:focus-visible {
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-    .popup-visible {
-        background: #2a2a2a;
-        color: #e0e0e0;
+    .popup-dialog {
+        background: #ffffff;
+        color: #1a1a1a;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     }
 
     .popup-header {
-        border-bottom-color: #444;
+        border-bottom-color: #e0e0e0;
     }
 
     .popup-title {
-        color: #ffffff;
+        color: #1a1a1a;
     }
 
     .popup-close-btn {
-        color: #e0e0e0;
+        color: #1a1a1a;
     }
 
     .popup-close-btn:hover {
-        background-color: #3a3a3a;
+        background-color: #f0f0f0;
     }
 
     .popup-close-btn:focus {
-        background-color: #1a3a5a;
+        background-color: #e3f2fd;
     }
 
     .popup-field-label {
-        color: #b0b0b0;
+        color: #505050;
     }
 
     .popup-field-value {
-        color: #e0e0e0;
+        color: #1a1a1a;
     }
 
     .popup-section-title {
@@ -131,7 +132,7 @@ a:focus-visible {
     }
 
     .popup-spec-item {
-        background-color: #3a3a3a;
+        background-color: #f8f9fa;
     }
 
     .popup-spec-label {
@@ -139,15 +140,15 @@ a:focus-visible {
     }
 
     .popup-spec-value {
-        color: #e0e0e0;
+        color: #1a1a1a;
     }
 
     .popup-field {
-        border-bottom-color: #444;
+        border-bottom-color: #e0e0e0;
     }
 
     .popup-no-data {
-        color: #888;
+        color: #666;
     }
 }
 
@@ -213,16 +214,21 @@ button {
 
 /* Ensure adequate spacing between touch targets */
 .popup-field {
-    padding: 12px 0;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
+    padding: 8px 0;
+    min-height: 36px;
+    display: grid;
+    align-items: start;
+}
+
+/* Tooltip z-index must exceed popup dialog (2001) */
+[role="tooltip"] {
+    z-index: 3000;
 }
 
 /* Semantic HTML and ARIA support */
 [role="dialog"] {
     position: fixed;
-    z-index: 1000;
+    z-index: 2001;
 }
 
 [role="application"] {

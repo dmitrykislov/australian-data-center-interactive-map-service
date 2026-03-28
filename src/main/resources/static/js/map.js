@@ -123,7 +123,10 @@ function addMarkersToMap() {
 function createMarker(dc) {
     const { latitude, longitude } = dc.coordinates;
     const status = dc.status.toLowerCase();
-    
+    const openFacilityPopup = () => {
+        showFacilityPopup(dc);
+    };
+
     // Create marker with valid Leaflet options.
     // Keyboard navigation is implemented via marker-keyboard-navigation.js
     const marker = L.marker([latitude, longitude], {
@@ -133,11 +136,10 @@ function createMarker(dc) {
         keyboard: true
     });
     
-    // Add click handler for popup (works for both mouse and touch)
-    marker.on('click', () => {
-        showFacilityPopup(dc);
-    });
-    
+    // Add activation handlers for desktop and touch interactions
+    marker.on('click', openFacilityPopup);
+    marker.on('touchend', openFacilityPopup);
+
     // Add hover tooltip
     marker.bindTooltip(dc.name, {
         permanent: false,
@@ -206,7 +208,7 @@ function showErrorMessage(message) {
     const container = document.getElementById('popup-container');
     container.innerHTML = `
         <div class="popup-overlay"></div>
-        <div class="popup-visible" style="text-align: center; padding: 40px;">
+        <div class="popup-visible popup-dialog" style="text-align: center; padding: 40px;">
             <h3 style="color: #d32f2f; margin-bottom: 10px;">Error</h3>
             <p style="color: #666;">${escapeHtml(message)}</p>
             <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer;">
@@ -215,7 +217,7 @@ function showErrorMessage(message) {
         </div>
     `;
     container.classList.remove('popup-hidden');
-    container.classList.add('popup-visible');
+    container.classList.add('popup-container-visible');
 }
 
 /**

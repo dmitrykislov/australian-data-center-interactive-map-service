@@ -20,6 +20,12 @@ html, body {
     display: none;
 }
 
+.popup-container-visible {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+}
+
 .attribution-info {
     background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid #ccc;
@@ -60,13 +66,14 @@ html, body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: #ffffff;
+    color: #1a1a1a;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
+    z-index: 2001;
+    width: min(92vw, 460px);
+    max-width: 460px;
+    max-height: 85vh;
     overflow-y: auto;
     animation: popupSlideIn 0.3s ease-out;
 }
@@ -89,7 +96,7 @@ html, body {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+    z-index: 2000;
 }
 
 .popup-header {
@@ -145,7 +152,7 @@ html, body {
 }
 
 .popup-section {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 .popup-section:last-child {
@@ -162,9 +169,10 @@ html, body {
 }
 
 .popup-field {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 130px 22px 1fr;
+    align-items: start;
+    gap: 0 6px;
     padding: 8px 0;
     border-bottom: 1px solid #f0f0f0;
 }
@@ -173,20 +181,131 @@ html, body {
     border-bottom: none;
 }
 
+/* Icon cell — 22 px column, centres the ⓘ button */
+.popup-field-icon-cell {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 2px;
+}
+
 .popup-field-label {
     font-size: 13px;
-    color: #666;
+    color: #505050;
     font-weight: 500;
+}
+
+.popup-field-label::after {
+    content: ':';
 }
 
 .popup-field-value {
     font-size: 14px;
     color: #1a1a1a;
-    font-weight: 500;
-    text-align: right;
-    max-width: 60%;
+    font-weight: 400;
+    text-align: left;
+    max-width: 100%;
     word-break: break-word;
+    line-height: 1.45;
 }
+
+.popup-link {
+    color: #0a58ca;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.popup-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.popup-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: #1f3a60;
+    background: #e8f0fe;
+    border: 1px solid #cddffc;
+}
+
+.info-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.info-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 700;
+    color: #0b5ed7;
+    background: #e7f0ff;
+    border: 1px solid #b6d1ff;
+    cursor: help;
+    padding: 0;
+    min-width: unset;
+    min-height: unset;
+    flex-shrink: 0;
+}
+
+.info-icon:focus-visible {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+}
+
+/* Tooltip panel — positioned by JS with position:fixed */
+.info-tooltip {
+    display: none;
+    position: fixed; /* JS sets exact top/left */
+    width: 220px;
+    padding: 8px 12px;
+    background: #1a1a1a;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 3000;
+    pointer-events: none;
+    white-space: normal;
+    word-break: normal;
+}
+
+/* Arrow for top-placement tooltip */
+.info-tooltip[data-placement="top"]::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1a1a1a;
+}
+
+/* Arrow for bottom-placement tooltip */
+.info-tooltip[data-placement="bottom"]::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: #1a1a1a;
+}
+
+/* Tooltip panel — shown/hidden exclusively by JS (style.display) */
+/* position:fixed is set by JS after getBoundingClientRect(); lives in <body> */
 
 .popup-status {
     display: inline-block;
@@ -271,7 +390,7 @@ html, body {
 /* Performance monitoring */
 .perf-indicator {
     position: fixed;
-    bottom: 20px;
+    top: 20px;
     right: 20px;
     background: rgba(0, 0, 0, 0.7);
     color: white;

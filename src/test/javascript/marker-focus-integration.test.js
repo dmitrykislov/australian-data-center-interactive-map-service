@@ -150,7 +150,7 @@ describe('Marker Focus Integration', () => {
                 const popup = createPopup(validFacility, popupContainer);
 
                 // Popup should be visible
-                expect(popupContainer.classList.contains('popup-visible')).toBe(true);
+                expect(popupContainer.classList.contains('popup-container-visible')).toBe(true);
 
                 // Close popup
                 const closeBtn = popup.element.querySelector('.popup-close-btn');

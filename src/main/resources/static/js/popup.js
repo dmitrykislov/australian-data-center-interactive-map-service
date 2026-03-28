@@ -22,10 +22,19 @@
  */
 export function generatePopupContent(facility) {
     validateFacility(facility);
-    
+
+    const metadata = facility.metadata || {};
     const statusClass = facility.status.toLowerCase();
     const statusDisplay = facility.status.toLowerCase().charAt(0).toUpperCase() + facility.status.toLowerCase().slice(1);
-    
+
+    const capacity = formatCapacity(facility.capacity);
+    const description = facility.description || 'N/A';
+    const coordinates = formatCoordinates(facility.coordinates);
+    const confirmationStatus = formatConfirmationStatus(
+        facility.confirmationStatus || metadata.confirmationStatus
+    );
+    const sourceUrl = sanitizeUrl(metadata.sourceUrl);
+
     let html = `
         <div class="popup-header">
             <h2 class="popup-title" id="popup-title">${escapeHtml(facility.name)}</h2>
@@ -33,22 +42,23 @@ export function generatePopupContent(facility) {
         </div>
         <div class="popup-content">
             <div class="popup-section">
-                <div class="popup-field">
-                    <span class="popup-field-label">Operator</span>
-                    <span class="popup-field-value">${escapeHtml(facility.operator)}</span>
-                </div>
-                <div class="popup-field">
-                    <span class="popup-field-label">Address</span>
-                    <span class="popup-field-value">${escapeHtml(facility.address || 'N/A')}</span>
-                </div>
-                <div class="popup-field">
-                    <span class="popup-field-label">City</span>
-                    <span class="popup-field-value">${escapeHtml(facility.city || 'N/A')}</span>
-                </div>
-                <div class="popup-field">
-                    <span class="popup-field-label">Status</span>
-                    <span class="popup-status ${statusClass}">${statusDisplay}</span>
-                </div>
+                <div class="popup-section-title">Facility Details</div>
+                ${buildFieldRow('Operator', facility.operator, 'Organization that owns or runs this data center.')}
+                ${buildFieldRow('Status', `<span class="popup-status ${statusClass}">${statusDisplay}</span>`, 'Current operational state of the facility.', true)}
+                ${buildFieldRow('Capacity', capacity, 'Total IT load capacity in megawatts (MW).')}
+                ${buildFieldRow('Description', description, 'Short summary of the facility and its purpose.')}
+                ${buildFieldRow('Confirmation', confirmationStatus, 'Shows whether this record has been officially confirmed.')}
+                ${buildFieldRow('Address', facility.address || 'N/A', 'Street address when available.')}
+                ${buildFieldRow('City', metadata.city || facility.city || 'N/A', 'Primary city where this facility is located.')}
+                ${buildFieldRow('Region', metadata.region || 'N/A', 'Australian state or territory for the facility.')}
+                ${buildFieldRow('Coordinates', coordinates, 'Latitude and longitude used to place the marker on the map.')}
+            </div>
+            <div class="popup-section">
+                <div class="popup-section-title">Data Provenance</div>
+                ${buildFieldRow('Source Reference', metadata.sourceReference || 'N/A', 'Human-readable source name used to verify the data.')}
+                ${buildFieldRow('Source URL', sourceUrl ? `<a class="popup-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(sourceUrl)}</a>` : 'N/A', 'Original source link used for verification.', true)}
+                ${buildFieldRow('Last Verified', metadata.lastVerifiedDate || 'N/A', 'Date when this record was last checked for accuracy.')}
+                ${buildFieldRow('Comments', metadata.comments || 'N/A', 'Additional verification notes and context for this record.')}
             </div>
     `;
     
@@ -93,6 +103,208 @@ function validateFacility(facility) {
 function hasSpecifications(specs) {
     if (!specs) return false;
     return !!(specs.power || specs.cooling || specs.racks || specs.tier);
+}
+
+function buildFieldRow(label, value, helpText, isHtml = false) {
+    const renderedValue = isHtml ? value : escapeHtml(value || 'N/A');
+    return `
+        <div class="popup-field">
+            <span class="popup-field-label">${escapeHtml(label)}</span>
+            <span class="popup-field-icon-cell">${renderInfoIcon(helpText)}</span>
+            <span class="popup-field-value">${renderedValue}</span>
+        </div>
+    `;
+}
+
+function renderInfoIcon(helpText) {
+    if (!helpText) {
+        return '';
+    }
+    return `<span class="info-icon-wrap">` +
+        `<button type="button" class="info-icon" data-help="${escapeHtml(helpText)}" aria-label="More information">i</button>` +
+        `</span>`;
+}
+
+/**
+ * Returns (creating if needed) a single shared tooltip element that lives
+ * directly on <body> so it is never clipped or mis-positioned by the popup's
+ * CSS transform.
+ * @returns {HTMLElement}
+ */
+function getOrCreateSharedTooltip() {
+    let tooltip = document.getElementById('popup-info-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('span');
+        tooltip.id = 'popup-info-tooltip';
+        tooltip.className = 'info-tooltip';
+        tooltip.setAttribute('role', 'tooltip');
+        tooltip.style.display = 'none';
+        document.body.appendChild(tooltip);
+    }
+    return tooltip;
+}
+
+/**
+ * Positions a tooltip element using fixed coordinates so it is never
+ * clipped by the scrollable popup container.
+ * @param {HTMLElement} icon
+ * @param {HTMLElement} tooltip
+ */
+function positionTooltip(icon, tooltip) {
+    const TOOLTIP_WIDTH = 220;
+    const GAP = 8;
+
+    const rect = icon.getBoundingClientRect();
+
+    tooltip.style.position = 'fixed';
+    tooltip.style.width = TOOLTIP_WIDTH + 'px';
+    tooltip.style.maxWidth = TOOLTIP_WIDTH + 'px';
+
+    // Horizontal: centred on icon, clamped inside viewport
+    let left = rect.left + rect.width / 2 - TOOLTIP_WIDTH / 2;
+    left = Math.max(GAP, Math.min(left, (window.innerWidth || 800) - TOOLTIP_WIDTH - GAP));
+    tooltip.style.left = left + 'px';
+
+    // Vertical: above icon by default, flip below when too close to top
+    if (rect.top - 70 > GAP) {
+        tooltip.style.top = (rect.top - GAP) + 'px';
+        tooltip.style.transform = 'translateY(-100%)';
+        tooltip.dataset.placement = 'top';
+    } else {
+        tooltip.style.top = (rect.bottom + GAP) + 'px';
+        tooltip.style.transform = 'none';
+        tooltip.dataset.placement = 'bottom';
+    }
+}
+
+/**
+ * Wires hover, focus, click, and keyboard interactions for every info icon
+ * inside the given popup element.  All icons share a single tooltip element
+ * that is appended to <body> so that the popup's CSS transform does not
+ * mis-position the tooltip.
+ * @param {HTMLElement} popupEl
+ */
+function wireInfoTooltips(popupEl) {
+    popupEl.querySelectorAll('.info-icon-wrap').forEach((wrap) => {
+        const icon = wrap.querySelector('.info-icon');
+        if (!icon) return;
+        const helpText = icon.dataset.help || '';
+
+        const show = () => {
+            const tooltip = getOrCreateSharedTooltip();
+            tooltip.textContent = helpText;
+            icon.setAttribute('aria-describedby', tooltip.id);
+            tooltip.style.display = 'block';
+            positionTooltip(icon, tooltip);
+            // Close any other open wrap first
+            popupEl.querySelectorAll('.info-icon-wrap.tooltip-open').forEach((w) => {
+                if (w !== wrap) w.classList.remove('tooltip-open');
+            });
+            wrap.classList.add('tooltip-open');
+        };
+
+        const hide = () => {
+            const tooltip = document.getElementById('popup-info-tooltip');
+            if (tooltip) tooltip.style.display = 'none';
+            icon.removeAttribute('aria-describedby');
+            wrap.classList.remove('tooltip-open');
+        };
+
+        const closeAll = () => {
+            const tooltip = document.getElementById('popup-info-tooltip');
+            if (tooltip) tooltip.style.display = 'none';
+            popupEl.querySelectorAll('.info-icon-wrap.tooltip-open').forEach((w) => {
+                w.classList.remove('tooltip-open');
+            });
+        };
+
+        // Hover
+        icon.addEventListener('mouseenter', show);
+        wrap.addEventListener('mouseleave', hide);
+
+        // Keyboard focus/blur
+        icon.addEventListener('focusin', show);
+        icon.addEventListener('focusout', hide);
+
+        // Click / tap toggle
+        icon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (wrap.classList.contains('tooltip-open')) {
+                hide();
+            } else {
+                closeAll();
+                show();
+            }
+        });
+
+        // Enter / Space activate; Escape dismiss
+        icon.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                e.stopPropagation();
+                if (wrap.classList.contains('tooltip-open')) {
+                    hide();
+                } else {
+                    closeAll();
+                    show();
+                }
+            }
+            if (e.key === 'Escape') {
+                hide();
+            }
+        });
+    });
+}
+
+function formatCapacity(capacity) {
+    if (typeof capacity !== 'number' || Number.isNaN(capacity) || capacity <= 0) {
+        return 'N/A';
+    }
+    return `${capacity} MW`;
+}
+
+function formatCoordinates(coordinates) {
+    if (!coordinates || typeof coordinates.latitude !== 'number' || typeof coordinates.longitude !== 'number') {
+        return 'N/A';
+    }
+
+    return `${coordinates.latitude.toFixed(4)}, ${coordinates.longitude.toFixed(4)}`;
+}
+
+function formatConfirmationStatus(status) {
+    if (!status) {
+        return 'N/A';
+    }
+
+    const normalized = status.toLowerCase();
+    return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+}
+
+function formatTags(tags) {
+    if (!tags || typeof tags !== 'string') {
+        return 'N/A';
+    }
+
+    const tagList = tags
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0);
+
+    if (tagList.length === 0) {
+        return 'N/A';
+    }
+
+    return `<span class="popup-tags">${tagList.map((tag) => `<span class="popup-tag">${escapeHtml(tag)}</span>`).join('')}</span>`;
+}
+
+function sanitizeUrl(url) {
+    if (!url || typeof url !== 'string') {
+        return '';
+    }
+    if (/^https?:\/\//i.test(url)) {
+        return url;
+    }
+    return '';
 }
 
 /**
@@ -188,15 +400,18 @@ export function createPopup(facility, container, onClose) {
     
     // Create popup element
     const popup = document.createElement('div');
-    popup.className = 'popup-visible';
+    popup.className = 'popup-visible popup-dialog';
     popup.innerHTML = generatePopupContent(facility);
     
     // Append to container
     container.appendChild(overlay);
     container.appendChild(popup);
     container.classList.remove('popup-hidden');
-    container.classList.add('popup-visible');
-    
+    container.classList.add('popup-container-visible');
+
+    // Wire info-icon tooltips (hover / focus / click / keyboard)
+    wireInfoTooltips(popup);
+
     // Handle Escape key - define before closeHandler to ensure it's in scope
     const escapeHandler = (e) => {
         if (e.key === 'Escape') {
@@ -209,6 +424,9 @@ export function createPopup(facility, container, onClose) {
     const closeHandler = () => {
         // Remove Escape key listener on all close paths
         document.removeEventListener('keydown', escapeHandler);
+        // Hide shared tooltip
+        const sharedTooltip = document.getElementById('popup-info-tooltip');
+        if (sharedTooltip) sharedTooltip.style.display = 'none';
         closePopup(container, overlay, popup);
         if (onClose) onClose();
     };
@@ -222,9 +440,16 @@ export function createPopup(facility, container, onClose) {
     });
     overlay.addEventListener('click', closeHandler);
     
-    // Prevent closing when clicking inside popup
+    // Prevent popup from closing on internal click; also close stray tooltips
     popup.addEventListener('click', (e) => {
         e.stopPropagation();
+        if (!e.target.closest('.info-icon-wrap')) {
+            const sharedTooltip = document.getElementById('popup-info-tooltip');
+            if (sharedTooltip) sharedTooltip.style.display = 'none';
+            popup.querySelectorAll('.info-icon-wrap.tooltip-open').forEach((w) => {
+                w.classList.remove('tooltip-open');
+            });
+        }
     });
     
     // Add Escape key listener
@@ -260,7 +485,7 @@ function closePopup(container, overlay, popup) {
         popup.parentNode.removeChild(popup);
     }
     if (container) {
-        container.classList.remove('popup-visible');
+        container.classList.remove('popup-container-visible');
         container.classList.add('popup-hidden');
     }
 }
