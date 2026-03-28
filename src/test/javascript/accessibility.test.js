@@ -78,8 +78,7 @@ describe('Accessibility - WCAG 2.1 AA Compliance', () => {
             const html = generatePopupContent(validFacility);
             expect(html).toContain('popup-field-label');
             expect(html).toContain('Operator');
-            expect(html).toContain('Address');
-            expect(html).toContain('City');
+            expect(html).toContain('Location');
             expect(html).toContain('Status');
         });
     });

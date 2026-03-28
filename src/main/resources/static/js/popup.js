@@ -35,9 +35,10 @@ export function generatePopupContent(facility) {
         facility.confirmationStatus || metadata.confirmationStatus
     );
     const sourceUrl = sanitizeUrl(metadata.sourceUrl);
-    const capacityHelpText = 'Capacity is the total IT power load the site is designed to support, measured in megawatts (MW). For a rough sense of scale: 1 MW equals 1,000 kilowatts, around 5–10 MW is a modest data center, around 20 MW is large, and 50 MW or more is typically hyperscale-scale.';
+    const capacityHelpText = 'Total IT power load this facility is built to support, in megawatts (MW).\n\n5–10 MW is a modest facility. 20 MW is large. 50 MW or more is hyperscale — comparable to powering tens of thousands of homes.';
     const confirmationHelpText = 'Shows whether this data center record has been officially confirmed or is still based on secondary research.';
     const lastVerifiedHelpText = 'The date when this record was last checked against the source to confirm it still looks accurate.';
+    const locationHtml = buildLocationValue(facility, metadata, coordinates, coordinatesLink);
 
     let html = `
         <div class="popup-header">
@@ -52,15 +53,11 @@ export function generatePopupContent(facility) {
                 ${buildFieldRow('Capacity', capacity, capacityHelpText)}
                 ${buildFieldRow('Description', description)}
                 ${buildFieldRow('Confirmation', confirmationStatus, confirmationHelpText)}
-                ${buildFieldRow('Address', facility.address || 'N/A')}
-                ${buildFieldRow('City', metadata.city || facility.city || 'N/A')}
-                ${buildFieldRow('Region', metadata.region || 'N/A')}
-                ${buildFieldRow('Coordinates', renderCoordinatesValue(coordinates, coordinatesLink), undefined, true)}
+                ${buildFieldRow('Location', locationHtml, undefined, true)}
             </div>
             <div class="popup-section">
                 <div class="popup-section-title">Data Provenance</div>
-                ${buildFieldRow('Source Reference', metadata.sourceReference || 'N/A')}
-                ${buildFieldRow('Source URL', sourceUrl ? `<a class="popup-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(sourceUrl)}</a>` : 'N/A', undefined, true)}
+                ${buildFieldRow('Source', sourceUrl ? `<a class="popup-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(sourceUrl)}</a>` : 'N/A', undefined, true)}
                 ${buildFieldRow('Last Verified', metadata.lastVerifiedDate || 'N/A', lastVerifiedHelpText)}
                 ${buildFieldRow('Comments', metadata.comments || 'N/A')}
             </div>
@@ -124,8 +121,11 @@ function renderInfoIcon(helpText) {
     if (!helpText) {
         return '';
     }
+    // &#10; preserves newlines through HTML attribute parsing so they render
+    // correctly when white-space: pre-line is applied to the tooltip element.
+    const attrValue = escapeHtml(helpText).replace(/\n/g, '&#10;');
     return `<span class="info-icon-wrap">` +
-        `<button type="button" class="info-icon" data-help="${escapeHtml(helpText)}" aria-label="More information">i</button>` +
+        `<button type="button" class="info-icon" data-help="${attrValue}" aria-label="More information">i</button>` +
         `</span>`;
 }
 
@@ -281,6 +281,34 @@ function renderCoordinatesValue(formattedCoordinates, googleMapsUrl) {
     }
 
     return `<a class="popup-link" href="${escapeHtml(googleMapsUrl)}" target="_blank" rel="noopener noreferrer" title="Open coordinates in Google Maps">${escapeHtml(formattedCoordinates)}</a>`;
+}
+
+/**
+ * Combines address, city, region, and coordinates into a single multi-line
+ * HTML value, e.g.:
+ *   123 Main St
+ *   Sydney, NSW
+ *   -33.8688, 151.2093  (clickable Google Maps link)
+ */
+function buildLocationValue(facility, metadata, coordinates, coordinatesLink) {
+    const lines = [];
+
+    if (facility.address) {
+        lines.push(escapeHtml(facility.address));
+    }
+
+    const city = metadata.city || facility.city;
+    const region = metadata.region;
+    const cityRegion = [city, region].filter(Boolean).map(escapeHtml).join(', ');
+    if (cityRegion) {
+        lines.push(cityRegion);
+    }
+
+    if (coordinates && coordinates !== 'N/A') {
+        lines.push(renderCoordinatesValue(coordinates, coordinatesLink));
+    }
+
+    return lines.length ? lines.join('<br>') : 'N/A';
 }
 
 function formatConfirmationStatus(status) {

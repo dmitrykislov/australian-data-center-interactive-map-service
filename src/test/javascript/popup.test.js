@@ -64,7 +64,6 @@ describe('Popup Content Generation', () => {
             expect(html).toContain('Major facility serving enterprise customers.');
             expect(html).toContain('NSW');
             expect(html).toContain('Sydney');
-            expect(html).toContain('Official Operator Documentation');
             expect(html).toContain('https://example.com/datacenter');
             expect(html).toContain('2026-03-27');
             expect(html).toContain('-33.8688');
@@ -94,7 +93,7 @@ describe('Popup Content Generation', () => {
 
             const html = generatePopupContent(facility);
 
-            expect(html).toContain('Coordinates');
+            expect(html).toContain('Location');
             expect(html).toContain('>N/A<');
             expect(html).not.toContain('google.com/maps/search');
         });
@@ -114,12 +113,47 @@ describe('Popup Content Generation', () => {
             expect(html).not.toContain('Latitude and longitude used to place the marker on the map.');
         });
 
+        it('should merge address, city, region, and coordinates into a single Location field', () => {
+            const facility = {
+                ...validFacility,
+                address: '100 George St',
+                coordinates: { latitude: -33.8688, longitude: 151.2093 },
+                metadata: {
+                    city: 'Sydney',
+                    region: 'NSW'
+                }
+            };
+
+            const html = generatePopupContent(facility);
+
+            // All parts appear together — no separate Address / City / Region rows
+            expect(html).toContain('Location');
+            expect(html).toContain('100 George St');
+            expect(html).toContain('Sydney, NSW');
+            expect(html).toContain('-33.8688, 151.2093');
+            // Individual field labels must not exist as separate rows
+            expect(html).not.toContain('>Address<');
+            expect(html).not.toContain('>City<');
+            expect(html).not.toContain('>Region<');
+            expect(html).not.toContain('>Coordinates<');
+        });
+
+        it('should not include Source Reference field', () => {
+            const facility = {
+                ...validFacility,
+                metadata: { sourceReference: 'Some Reference', sourceUrl: 'https://example.com' }
+            };
+
+            const html = generatePopupContent(facility);
+
+            expect(html).not.toContain('Source Reference');
+            expect(html).not.toContain('Some Reference');
+        });
+
         it('capacity info icon should use plain-language size comparisons', () => {
             const html = generatePopupContent(validFacility);
-            expect(html).toContain('1 MW equals 1,000 kilowatts');
-            expect(html).toContain('5–10 MW is a modest data center');
-            expect(html).toContain('20 MW is large');
-            expect(html).toContain('50 MW or more is typically hyperscale-scale');
+            expect(html).toContain('5\u201310 MW is a modest facility');
+            expect(html).toContain('50 MW or more is hyperscale');
         });
     });
 
