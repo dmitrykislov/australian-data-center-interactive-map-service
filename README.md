@@ -57,3 +57,14 @@ docker compose up --build
 - Redis is internal to Compose (no host `6379` binding), which avoids conflicts with any local Redis instance.
 - Compose sets `REDIS_HOST=redis` so the app connects to the Redis container.
 - Existing deployment docs are available in `docs/DEPLOYMENT.md`.
+
+## Maven Dependency Caching During Docker Builds
+
+- The Docker build uses a BuildKit cache mount for Maven home, so repeated `docker compose up --build` runs reuse dependencies instead of redownloading everything.
+- Maven still decides the local repo location from its own defaults/settings (no hardcoded `maven.repo.local` flag).
+- First build downloads dependencies; later builds should be much faster and show far fewer `Downloading from` lines.
+- If needed, ensure BuildKit is enabled:
+
+```bash
+export DOCKER_BUILDKIT=1
+```

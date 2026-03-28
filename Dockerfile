@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7
 # Multi-stage Dockerfile for DataCenter Mapping Application
 # Stage 1: Build
 FROM maven:3.9.6-eclipse-temurin-21 AS builder
@@ -11,8 +12,10 @@ COPY checkstyle.xml .
 # Copy source code
 COPY src ./src
 
-# Build application directly (go-offline fails because of a non-resolvable Gatling plugin version)
-RUN mvn clean package -DskipTests -B
+# Build application with persistent Maven cache.
+# Maven resolves local repo location from its own settings/defaults.
+RUN --mount=type=cache,target=/root/.m2 \
+    mvn clean package -DskipTests -B
 
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jre-alpine

@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7
 # Optimized multi-stage Dockerfile with minimal final image
 FROM maven:3.9.6-eclipse-temurin-21 AS builder
 
@@ -7,7 +8,8 @@ COPY pom.xml .
 COPY checkstyle.xml .
 COPY src ./src
 
-RUN mvn clean package -DskipTests -B && \
+RUN --mount=type=cache,target=/root/.m2 \
+    mvn clean package -DskipTests -B && \
     mkdir -p /build/extracted && \
     cd /build/extracted && \
     jar xf /build/target/datacenter-mapping-*.jar
